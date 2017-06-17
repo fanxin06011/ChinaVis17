@@ -327,8 +327,8 @@
 		//地图上的点双击触发
 		function mapchartdblclickfunc(params){
 			console.log(params.data.name+" "+params.data.ind);
-			if(durationbrushrange==-1){return;}
 			if(barmap.mode==1){
+				if(durationbrushrange==-1){return;}
 				if(dblclickedbar==params.data.ind){
 					mapChart.dispatchAction({
 						type: 'downplay',
@@ -384,12 +384,25 @@
 					});
 				}
 			}else{
+				//console.log("pop4");
 				if(dblclickedbar==params.data.ind){
+					mapChart.dispatchAction({
+						type: 'downplay',
+						dataIndex: dblclickedbar0
+					});
 					dblclickedbar=-1;
 					dblclickedbar0=-1;
 					$("#p4_pop").hide();
 				}else{
-					dblclickedbar=params.data.ind;
+					mapChart.dispatchAction({
+						type: 'downplay',
+						dataIndex: dblclickedbar0
+					});
+					dblclickedbar=params.data.ind;dblclickedbar0=params.dataIndex;
+					mapChart.dispatchAction({
+						type: 'highlight',
+						dataIndex: params.dataIndex
+					})
 					$("#p4_pop").css("left",event.clientX+10).css("top",event.clientY+10);
 					Observer.fireEvent("bar_dblclicked",params.data.ind,Barmap);
 					$("#p4_pop").show();
@@ -824,8 +837,8 @@
 		};
 		function re0(){
 			//切换mode时
-			$("#p1_pop").hide();
-			dblclickedbar=-1;
+			$("#p1_pop").hide();$("#p4_pop").hide();
+			dblclickedbar=-1;dblclickedbar0=-1;
 			cancelhl();
 			durationfilterbarid=totalbaridarr;
 			cusnumberfilterbarid=totalbaridarr;

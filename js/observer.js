@@ -51,7 +51,7 @@ function(){
 
 var obs = Observer();
 var barmap = Barmap(obs);
-
-
-
-
+var example = Example(obs);
+var popview = Popview(obs);
+var popuchara = Popuchara(obs);
+var crime = Crime(obs);
