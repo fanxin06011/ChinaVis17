@@ -1,0 +1,116 @@
+body{
+	font-family: Georgia;
+	background-color: #404a59;
+}
+*{
+	margin:0px;
+	padding:0px;
+}
+text.mono{
+	font-size: 9px;
+	font-family: Consolas, courier;
+	fill: white;
+	color:white;
+  }
+
+.axis path,.axis line{  
+	fill: none;  
+	stroke: white;  
+	shape-rendering: crispEdges;  
+}  
+.axis text ,.tick{  
+	fill: white;
+	font-family: Consolas, courier;
+	font-size: 9px;  
+}
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .3;
+  shape-rendering: crispEdges;
+}
+
+
+.main_view{
+	position: absolute;
+	background-color: #404a59;
+	float:left;
+	border:5px 5px 5px 5px;
+}
+#left_view{
+	top:0%;left:0%;
+	width:15%;height:70%;
+}
+#middle_view{
+	top:0%;left:15%;
+	width:40%;height:70%;
+}
+#right_view{
+	top:0%;left:55%;
+	width:45%;height:70%;
+}
+#bottom_view{
+	top:70%;left:0%;
+	width:100%;height:30%;
+}
+#bar_filter_timerange{
+	position: absolute;
+	top:0%;left:0%;
+	width:100%;height:50%;
+}
+#bar_filter_cusnumber{
+	position: absolute;
+	top:50%;left:0%;
+	width:100%;height:50%;
+}
+.pop_view{
+	position: absolute;
+	top:10%;left:10%;
+	width:15%;height:20%;
+	border-radius:10px;
+	z-index:999;
+}
+#p4_pop{
+	background-color: grey;
+}
+
+.tg {
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-color: grey;
+	//background-color: black;
+}
+	
+.tg td {
+	font-family: Arial, sans-serif;
+	font-size: 12px;
+	border-style: solid;
+	border-width: 0px;
+	overflow: hidden;
+	word-break: normal;
+	border-color: grey;
+	//color: white;
+	//background-color: black;
+}
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
+::-webkit-scrollbar  
+{  
+    width: 6px;  
+    height: 6px;  
+    background-color: #F5F5F5;  
+}  
+  
+/*定义滚动条轨道 内阴影+圆角*/  
+::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
+    border-radius: 10px;  
+    background-color: #F5F5F5;  
+}  
+  
+/*定义滑块 内阴影+圆角*/  
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 10px;  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+    background-color: #555;  
+}  

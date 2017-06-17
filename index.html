@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>ChinaVis2017</title>
+	
+	
+	<script src="jslib/jquery.min.js"></script>
+	<script src="jslib/d3.js"></script>
+	<script src="jslib/underscore-min.js"></script>
+	<script src="jslib/echarts.min.js"></script>
+	<script src="jslib/chongqing.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/layout.css">
+</head>
+
+
+<body>
+	<p id="problem1btn" ></p>
+	<p id="problem2btn"></p>
+	<p id="problem3btn"></p>
+	<div class="main_view" id="left_view">
+		<table id="problem_1" border="0"  class="tg">
+		<tr>
+			<td id="bar_filter_timerange">
+		  </td>
+		</tr>
+		<tr>
+			<td id="bar_filter_cusnumber">
+			</td>
+		</tr>
+		</table>
+	</div>
+	
+	<div class="main_view" id="middle_view"></div>
+	<div class="pop_view" id="p1_pop"></div>
+	
+	<div class="main_view" id="right_view">
+		<div id="china_map"></div>
+		<div id="province_line"></div>
+	</div>
+	
+	<div class="main_view" id="bottom_view"></div>
+	
+	<div class="pop_view" id="p4_pop"></div>
+	
+
+<script src="js/barmap.js"></script>
+<script src="js/observer.js"></script>
+
+</body> 
+</html>
