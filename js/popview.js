@@ -268,17 +268,12 @@
         }
 		
 		popview.onMessage = function(message, data, from){
-			if(message == "bar_selected"){
+			if(message == "bar_dblclicked"){
 				if(from == Barmap ){
                     $("#p4_pop").show();
 					update(data);
 				}
 			}
-            if(message == "bar_selected_cancel"){
-                if(from == Barmap ){
-                    $("#p4_pop").hide();
-				}
-            }
 		};
 
 		
