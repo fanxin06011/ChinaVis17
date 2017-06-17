@@ -1,4 +1,4 @@
-body{
+﻿body{
 	font-family: Georgia;
 	background-color: #404a59;
 }
@@ -71,9 +71,18 @@ text.mono{
 }
 #p4_pop{
 	background-color: grey;
-	width:30%;height:40%;
+	width:30%;height:80%;
 }
 
+#p4_pop svg .p4_axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+#p4_pop svg .p4_axis path,#p4_pop svg .p4_axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}     	
 .tg {
 	border-collapse: collapse;
 	border-spacing: 0;
