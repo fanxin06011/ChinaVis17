@@ -339,7 +339,7 @@
 					objpreclicked.seriesName=params.seriesName;
 					objpreclicked.dataIndex=params.dataIndex;
 					objpreclicked.name=params.name;
-					if(barmap.mode==3){
+					if(barmap.mode==3&&_.has(params.data, "SITEID")){
 						console.log(params.data.SITEID+" clicked");
 						Observer.fireEvent("bar_selected_p3",params.data.SITEID,Barmap);
 					}else{
@@ -355,7 +355,7 @@
 		}		
 		//地图上的点双击触发
 		function mapchartdblclickfunc(params){
-			console.log(params.data.name+" "+params.data.ind);
+			console.log(params.data);
 			if(barmap.mode==1){
 				if(durationbrushrange==-1){return;}
 				if(dblclickedbar==params.data.ind){
