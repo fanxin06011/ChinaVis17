@@ -96,6 +96,7 @@
             }
         });
 
+        console.log(gantt_data);
         function renderItem(params, api) {
             var categoryIndex = api.value(0);
             var start = api.coord([api.value(1), categoryIndex]);
@@ -202,13 +203,7 @@
 
         myChart.setOption(option);
 
-        function trans(a)
-        {
-            a[4]='\\';
-            a[7]='\\';
-            console.log(a);
-            return a;
-        }
+     
 
         function getnewdataid(bar_id)
         {
@@ -231,18 +226,30 @@
                     for(var k = 0; k < people.length;k++)
                     {
                         var tmp = people[k];
-                        var tmp_begin_date = new Date((tmp["beginTime"]));
-                        var tmp_end_date   = new Date((tmp["endTime"]));
+                        //console.log(trans(tmp["beginTime"]));
+                        var str1 = tmp["beginTime"];
+                        str1=str1.replace(/-/g,"/")
+
+                        var str2 = tmp["endTime"];
+                        str2=str2.replace(/-/g,"/")
+
+                        var str3 = selected_time_min;
+                        str3 = str3.replace(/-/g,"/");
+
+                        var tmp_begin_date = new Date(str1);
+                        var tmp_end_date   = new Date(str2);
+                        var tmp_base_time  = new Date(str3);
                         console.log(tmp_begin_date);
+                        console.log(tmp_end_date);
                         categories.push(tmp["PERSONID"]);
                         gantt_data.push({
-                                name: types[0],
+                                name: types[0].name,
                                 value: [
                                     k,
-                                    tmp_begin_date.getTime(),
-                                    tmp_end_date.getTime(),
-                                    tmp_begin_date.getTime()-tmp_end_date.getTime()
-                                ],
+                                    (tmp_begin_date.getTime()),
+                                    (tmp_end_date.getTime()),
+                                    (tmp_end_date.getTime()-tmp_begin_date.getTime())                        
+                                    ],
                                 itemStyle: {
                                     normal: {
                                         color: types[0].color
@@ -252,7 +259,87 @@
                         //console.log(typeof(data[k][beginTime]));
                     }
                     console.log(gantt_data);
-                    myChart.setOption(option);
+                    console.log(categories);
+                    option = {
+            tooltip: {
+                formatter: function (params) {
+                    return params.marker + params.name + ': ' + params.value[3] + ' ms';
+                }
+            },  
+            legend: {
+                data: ['bar', 'error']
+            },
+            dataZoom: [{
+                type: 'slider',
+                filterMode: 'weakFilter',
+                showDataShadow: false,
+                top: domheight-10,
+                height: 5,
+                borderColor: 'transparent',
+                backgroundColor: '#e2e2e2',
+                handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7v-1.2h6.6z M13.3,22H6.7v-1.2h6.6z M13.3,19.6H6.7v-1.2h6.6z', // jshint ignore:line
+                handleSize: 10,
+                handleStyle: {
+                    shadowBlur: 6,
+                    shadowOffsetX: 1,
+                    shadowOffsetY: 2,
+                    shadowColor: '#aaa'
+                },
+                labelFormatter: ''
+            }, {
+                type: 'inside',
+                filterMode: 'weakFilter'
+            }],
+            grid: {
+                height:domheight - 50,
+                top:10
+            },
+            xAxis: {
+                min: startTime,
+                scale: true,
+                axisLabel: {
+                    formatter: function (val) {
+                        return Math.max(0, val - startTime) + ' ms';
+                    },
+                textStyle: {
+                                color: 'white'
+                            }
+                },
+                axisLine:{
+                lineStyle:{
+                    color:'white'
+                }
+                }
+            },
+            yAxis: {
+                data: categories,
+                axisLabel:{
+                textStyle: {
+                                color: 'white'
+                            }
+                        },
+                axisLine:{
+                lineStyle:{
+                    color:'white'
+                }
+                }
+            },
+            series: [{
+                type: 'custom',
+                renderItem: renderItem,
+                itemStyle: {
+                    normal: {
+                        opacity: 0.8
+                    }
+                },
+                encode: {
+                    x: [1, 2],
+                    y: 0
+                },
+                data: gantt_data
+            }]
+        };
+                myChart.setOption(option);
                     //Observer.fireEvent("problem3_timerange",data.res,Crime);
                 },
                 error: function(message) {
