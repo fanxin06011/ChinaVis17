@@ -7,7 +7,8 @@
 		/*
 		code here
 		*/
-
+        var selected_time_min;
+        var selected_time_max;
 		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
       $("#slider").dateRangeSlider({
         bounds:{
@@ -36,6 +37,8 @@
 			console.log("Something moved. min: " + data.values.min + " max: " + data.values.max);
 			//反馈时间的地方我在这里写了一个console.Log···但是不知道怎么用端口
 			var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S");
+            selected_time_min = parseTime(data.values.min);
+            selected_time_max = parseTime(data.values.max);
 			console.log({beginTime:parseTime(data.values.min), endTime:parseTime(data.values.max)});
 			$.ajax({
 				type: "POST",
@@ -60,7 +63,7 @@
 
         var myChart = echarts.init(document.getElementById('Chart'));
         var domheight = 200;
-        var data = [];
+        var gantt_data = [];
         var dataCount = 10;
         var startTime = +new Date();
         var categories = ['categoryA', 'categoryB', 'categoryC','categoryD','categoryE','categoryF','categoryG','categoryH','categoryI'];
@@ -74,7 +77,7 @@
             for (var i = 0; i < dataCount; i++) {
                 var typeItem = types[Math.round(Math.random() * (types.length - 1))];
                 var duration = Math.round(Math.random() * 10000);
-                data.push({
+                gantt_data.push({
                     name: typeItem.name,
                     value: [
                         index,
@@ -192,13 +195,36 @@
                     x: [1, 2],
                     y: 0
                 },
-                data: data
+                data: gantt_data
             }]
         };
 
         myChart.setOption(option);
 
-
+        function getnewdataid(bar_id)
+        {
+            var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S");
+            console.log("aa");
+            //console.log({beginTime:parseTime(data.values.min), endTime:parseTime(data.values.max)});
+            console.log(bar_id);
+            console.log(selected_time_min);
+            console.log(selected_time_max);
+            $.ajax({
+                type: "POST",
+                url: "http://182.254.134.126:9494/get_record_by_time_and_barid",
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify({id:bar_id,beginTime:selected_time_min, endTime:selected_time_max}),
+                success: function(data) {
+                    console.log(data);
+                    //Observer.fireEvent("problem3_timerange",data.res,Crime);
+                },
+                error: function(message) {
+                   
+                    console.log("查询失败");
+                }
+            });
+        }
 
 
 
@@ -208,6 +234,10 @@
 			if(message == "bar_selected_p3"){
 				if(from == Barmap ){
 					console.log(data);
+                    categories = [];
+                    gantt_data = [];
+                    console.log("aa");
+                    getnewdataid(data);
 				}
 			}
 
