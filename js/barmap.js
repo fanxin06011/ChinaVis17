@@ -341,7 +341,7 @@
 					objpreclicked.name=params.name;
 					if(barmap.mode==3&&_.has(params.data, "SITEID")){
 						console.log(params.data.SITEID+" clicked");
-						Observer.fireEvent("bar_selected_p3",params.data.SITEID,Barmap);
+						Observer.fireEvent("bar_selected_p3",params.data.barID,Barmap);
 					}else{
 						Observer.fireEvent("bar_selected",params.data.ind,Barmap);
 					}
