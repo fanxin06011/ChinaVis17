@@ -260,10 +260,12 @@
                     }
                     console.log(gantt_data);
                     console.log(categories);
-                    option = {
+            
+            option = {
             tooltip: {
                 formatter: function (params) {
-                    return params.marker + params.name + ': ' + params.value[3] + ' ms';
+                    console.log(params);
+                    return categories[params.dataIndex] + params.name + ': ' + params.value[3] + ' ms';
                 }
             },  
             legend: {
@@ -295,7 +297,7 @@
                 top:10
             },
             xAxis: {
-                min: startTime,
+                min: tmp_base_time.getTime(),
                 scale: true,
                 axisLabel: {
                     formatter: function (val) {
@@ -337,9 +339,11 @@
                     y: 0
                 },
                 data: gantt_data
-            }]
-        };
+                }]
+            };
                 myChart.setOption(option);
+                myChart.setOption(option);
+
                     //Observer.fireEvent("problem3_timerange",data.res,Crime);
                 },
                 error: function(message) {
