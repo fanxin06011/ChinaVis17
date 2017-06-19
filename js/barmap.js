@@ -6,7 +6,7 @@
 		$("#problem1btn").on("click",function(){
 			barmap.mode=1;
 			//mode-1 问题一 不响应其他视图事件
-			$("#problem_1").show();
+			//$("#problem_1").show();
 			re0();
 			//改变颜色大小
 			//colorlinear=function(ind,d){return '#abc';}
@@ -42,6 +42,7 @@
 		var cusnumberrange=-1;
 		
 		var problem3bararr=[];
+		var problem3barobj=[];
 		var problem2barobj=[];
 		
 		var colorcompute;
@@ -120,6 +121,27 @@
 					res.push(geoCoord.concat(data[i].value));
 				}
 			}
+			return res;
+		};
+		var convertData3 = function (data) {
+			var res = [];
+			let tmpidarr=_.pluck(bardata,"barID");
+			for (var i = 0; i < data.length; i++) {
+				let tmpii=_.indexOf(tmpidarr,data[i].ID);
+				let tmpsiteid=bardata[tmpii].name;
+				var geoCoord = geoCoordMap[tmpsiteid];
+				//console.log(tmpii);console.log(tmpsiteid);
+				if (geoCoord) {
+					res.push({
+						SITEID: tmpsiteid,
+						barID:data[i].ID,
+						value: geoCoord.concat(data[i].value),
+						COUNT: data[i]["nums"]
+					});
+					//res.push(geoCoord.concat(data[i]["COUNT(*)"]));
+				}
+			}
+			//console.log(res);
 			return res;
 		};
 		//地图和散点图设置
@@ -218,7 +240,8 @@
 				color: '#fff'
 			}
 		};
-		
+		var mapoption3 =Observer.deepClone(mapoption);
+		mapoption3.series[0].symbolSize=function(val, param){return 8;}
 		
 		var barpop = document.getElementById("p1_pop");
 		var barpopChart = echarts.init(barpop);
@@ -316,7 +339,13 @@
 					objpreclicked.seriesName=params.seriesName;
 					objpreclicked.dataIndex=params.dataIndex;
 					objpreclicked.name=params.name;
-					Observer.fireEvent("bar_selected",params.data.ind,Barmap);
+					if(barmap.mode==3){
+						console.log(params.data.SITEID+" clicked");
+						Observer.fireEvent("bar_selected_p3",params.data.SITEID,Barmap);
+					}else{
+						Observer.fireEvent("bar_selected",params.data.ind,Barmap);
+					}
+					
 				}else{
 					//如果重复点击
 					objpreclicked={};
@@ -797,7 +826,7 @@
 						console.log(problem3bararr);
 						//mapChart.setOption(mapoption, true);
 						//mode-3 问题三 青年犯罪团伙 高亮
-						$("#problem_1").hide();
+						//$("#problem_1").hide();
 						re0();
 						//改变颜色大小
 						/*
@@ -819,7 +848,7 @@
 				//if(from == Iphist ){
 					problem2barobj=data;
 					if(barmap.mode==2){
-						$("#problem_1").hide();
+						//$("#problem_1").hide();
 						re0();
 						let tmp=_.pluck(data,"value");
 						//console.log(tmp);
@@ -832,12 +861,48 @@
 					}
 				//}
 			}
+			if(message == "problem3_timerange"){
+				if(from == Crime ){
+					if(barmap.mode==3){
+						re0();
+						//console.log(data);
+						problem2barobj=data;
+						mapoption3.series[0].data=convertData3(data);
+
+						var tmp=_.pluck(data,"nums");
+						var tmp2=_.pluck(data,"ID");
+						var min=_.min(tmp);var max=_.max(tmp);
+						//console.log(min+" "+max);
+						var a = d3.rgb(224,224,224);
+						var b = d3.rgb(70,100,190);
+						colorcompute = d3.interpolate(a,b);  
+						colorcomputelinear = d3.scale.linear()  
+												.domain([min,max])  
+												.range([0,1]);  
+
+						mapoption3.series[0].itemStyle.normal.color=function(param){
+							//console.log(param);
+							let indt=param.data.barID;
+							let tmpi=_.indexOf(tmp2,indt);
+							if(tmpi!=-1){return colorcompute(colorcomputelinear(tmp[tmpi])); }
+							else return "#E0E0E0";
+						}
+						
+						mapoption3.tooltip.formatter=function (params) {
+							return "barID: "+params.data.SITEID+" cnt: "+params.data.COUNT;
+						}
+						mapChart.setOption(mapoption3, true);
+
+					}
+				}
+			}
 			
 			
 		};
 		function re0(){
 			//切换mode时
-			$("#p1_pop").hide();$("#p4_pop").hide();
+			$("#p1_pop").hide();
+			$("#p4_pop").hide();
 			dblclickedbar=-1;dblclickedbar0=-1;
 			cancelhl();
 			durationfilterbarid=totalbaridarr;
@@ -863,7 +928,15 @@
 		
 		//problem3 test
 		setTimeout(function(){
-			Observer.fireEvent("problem3",[1095],Barmap);
+			Observer.fireEvent("problem3_timerange",[
+				{"SITEID":50010210000086,"COUNT(*)":100},
+				{"SITEID":50024210000053,"COUNT(*)":50},
+				{"SITEID":50023010000004,"COUNT(*)":30},
+				{"SITEID":50023010000014,"COUNT(*)":40},
+				{"SITEID":50024210000060,"COUNT(*)":31},
+				{"SITEID":50022310000007,"COUNT(*)":7},
+				{"SITEID":50022710000024,"COUNT(*)":22}
+			],Barmap);
 		},6000);
 		*/
 		

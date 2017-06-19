@@ -33,8 +33,24 @@
         });
 
         $("#slider").bind("valuesChanged", function(e, data){
-        console.log("Something moved. min: " + data.values.min + " max: " + data.values.max);
-        //反馈时间的地方我在这里写了一个console.Log···但是不知道怎么用端口
+			console.log("Something moved. min: " + data.values.min + " max: " + data.values.max);
+			//反馈时间的地方我在这里写了一个console.Log···但是不知道怎么用端口
+			var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S");
+			console.log({beginTime:parseTime(data.values.min), endTime:parseTime(data.values.max)});
+			$.ajax({
+				type: "POST",
+				url: "http://182.254.134.126:9494/get_siteId_and_itscount_by_time",
+				dataType: "json",
+				contentType: "application/json;charset=utf-8",
+				data: JSON.stringify({beginTime:parseTime(data.values.min), endTime:parseTime(data.values.max)}),
+				success: function(data) {
+					console.log(data);
+					Observer.fireEvent("problem3_timerange",data.res,Crime);
+				},
+				error: function(message) {
+					console.log("查询失败");
+				}
+			});
         });
 
         /*
@@ -189,18 +205,12 @@
 
 		//Observer.fireEvent("event_name",dataSend,Crime);
 		crime.onMessage = function(message, data, from){
-			if(message == "bar_selected"){
+			if(message == "bar_selected_p3"){
 				if(from == Barmap ){
-					console.log("aaa");
 					console.log(data);
 				}
 			}
-			if(message == "bar_selected_cancel"){
-				if(from == Barmap ){
-					console.log("bbb");
-					console.log(data);
-				}
-			}
+
 		};
 
 		
