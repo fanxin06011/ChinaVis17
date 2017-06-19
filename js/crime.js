@@ -66,6 +66,7 @@
         var gantt_data = [];
         var dataCount = 10;
         var startTime = +new Date();
+        console.log(typeof(startTime));
         var categories = ['categoryA', 'categoryB', 'categoryC','categoryD','categoryE','categoryF','categoryG','categoryH','categoryI'];
         var types = [
             {name: 'Online Time', color: '#7b9ce1'}
@@ -201,6 +202,14 @@
 
         myChart.setOption(option);
 
+        function trans(a)
+        {
+            a[4]='\\';
+            a[7]='\\';
+            console.log(a);
+            return a;
+        }
+
         function getnewdataid(bar_id)
         {
             var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S");
@@ -216,7 +225,34 @@
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:bar_id,beginTime:selected_time_min, endTime:selected_time_max}),
                 success: function(data) {
-                    console.log(data);
+                    console.log(data.res);
+                    console.log(data.res.length);
+                    var people=data.res;
+                    for(var k = 0; k < people.length;k++)
+                    {
+                        var tmp = people[k];
+                        var tmp_begin_date = new Date((tmp["beginTime"]));
+                        var tmp_end_date   = new Date((tmp["endTime"]));
+                        console.log(tmp_begin_date);
+                        categories.push(tmp["PERSONID"]);
+                        gantt_data.push({
+                                name: types[0],
+                                value: [
+                                    k,
+                                    tmp_begin_date.getTime(),
+                                    tmp_end_date.getTime(),
+                                    tmp_begin_date.getTime()-tmp_end_date.getTime()
+                                ],
+                                itemStyle: {
+                                    normal: {
+                                        color: types[0].color
+                                    }
+                                }
+                            });
+                        //console.log(typeof(data[k][beginTime]));
+                    }
+                    console.log(gantt_data);
+                    myChart.setOption(option);
                     //Observer.fireEvent("problem3_timerange",data.res,Crime);
                 },
                 error: function(message) {
