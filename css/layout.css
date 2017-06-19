@@ -69,16 +69,17 @@ text.mono{
 	border-radius:10px;
 	z-index:999;
 }
+
 #p4_pop{
 	background-color: rgba(0,0,0,0.5);
 	width:500px;height:650px;
 }
 
-#p4_pop svg .p4_axis text {
+#p4_pop svg .p4_axis text, .p4_1t, .p4text, .p4_1t, .p4_0t, .p4_3_0, .p4_3_1data, .p4_3_2data{
     font-family: sans-serif;
     font-size: 11px;
 }
-#p4_pop svg .p4_axis path,#p4_pop svg .p4_axis line {
+#p4_pop svg .p4_axis path,#p4_pop svg .p4_axis line{
     fill: none;
     stroke: white;
     shape-rendering: crispEdges;

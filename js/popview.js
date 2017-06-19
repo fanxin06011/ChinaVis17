@@ -24,9 +24,8 @@
             .attr('x',50)
             .attr('y',25)
             .text('未成年人')
-            .attr("font-family", "Courier New")
-            .attr("fill", "white")
-            .attr("font-size", "20px");
+            .attr("class","p4text")
+            .attr("fill", "white");
         svg0.append('circle')
             .attr('cx',160)
             .attr('cy',20)
@@ -36,9 +35,8 @@
             .attr('x',180)
             .attr('y',25)
             .text('成年人')
-            .attr("font-family", "Courier New")
-            .attr("fill", "white")
-            .attr("font-size", "20px");
+            .attr("class","p4text")
+            .attr("fill", "white");
         svg0.append('circle')
             .attr('cx',275)
             .attr('cy',20)
@@ -48,9 +46,8 @@
             .attr('x',295)
             .attr('y',25)
             .text('流动人口')
-            .attr("font-family", "Courier New")
-            .attr("fill", "white")
-            .attr("font-size", "20px");
+            .attr("class","p4text")
+            .attr("fill", "white");
         //svg1用于显示饼图
         var svg1 = d3.select('#p4_pop').append('svg').attr('width',width_svg).attr('height',height_svg);
         var p4_1 = svg1.append('g').attr('transform', "translate(" + width_svg/4 + ',' + height_svg/2 + ')');
@@ -184,8 +181,6 @@
             .text(function(d){return d;})
             .attr('x',function(d,i){return xScale3(i)+xScale3.rangeBand()/2;})
             .attr('y',height_svg-padding0)
-            .attr("font-family", "Courier New")
-            .attr("font-size", "20px")
             .attr("fill", "white")
             .attr("text-anchor", "middle")
             .attr('class','p4_3_0');
@@ -216,8 +211,6 @@
             .text(function(d){return d;})
             .attr('x',function(d,i){return xScale3(i)+xScale3.rangeBand()/4;})
             .attr('y',function(d){return yScale3(d)+padding1*0.7;})
-            .attr("font-family", "Courier New")
-            .attr("font-size", "11px")
             .attr("fill", "white")
             .attr("text-anchor", "middle")
             .attr('class','p4_3_1data');  
@@ -228,8 +221,6 @@
             .text(function(d){return d;})
             .attr('x',function(d,i){return xScale3(i)+xScale3.rangeBand()*3/4;})
             .attr('y',function(d){return yScale3(d)+padding1*0.7;})
-            .attr("font-family", "Courier New")
-            .attr("font-size", "11px")
             .attr("fill", "white")
             .attr("text-anchor", "middle")
             .attr('class','p4_3_2data');
