@@ -70,7 +70,7 @@ text.mono{
 	z-index:999;
 }
 #p4_pop{
-	background-color: grey;
+	background-color: rgba(0,0,0,0.5);
 	width:500px;height:650px;
 }
 
