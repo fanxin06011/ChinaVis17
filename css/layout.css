@@ -71,7 +71,7 @@ text.mono{
 }
 #p4_pop{
 	background-color: grey;
-	width:30%;height:80%;
+	width:500px;height:650px;
 }
 
 #p4_pop svg .p4_axis text {
@@ -80,7 +80,7 @@ text.mono{
 }
 #p4_pop svg .p4_axis path,#p4_pop svg .p4_axis line {
     fill: none;
-    stroke: black;
+    stroke: white;
     shape-rendering: crispEdges;
 }     	
 .tg {
