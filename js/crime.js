@@ -232,7 +232,7 @@
                 personid : categories
             }
             console.log(sentData);
-            Observer.fireEvent("Selected_id"sentData,Crime);
+            Observer.fireEvent("Selected_id",sentData,Crime);
             /*
             var mainSeries = params.batch[0].selected[0];
 
