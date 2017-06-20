@@ -68,7 +68,7 @@
         var dataCount = 10;
         var startTime = +new Date();
         console.log(typeof(startTime));
-        var categories = ['categoryA', 'categoryB', 'categoryC','categoryD','categoryE','categoryF','categoryG','categoryH','categoryI'];
+        var categories = ['cc03a93e2decc4cc1c', 'ea723a6e98e5749bb0', '003f97c9f42edf51b6','4aa5e9d88ccb6c670f'];
         var types = [
             {name: 'Online Time', color: '#7b9ce1'}
         ];
