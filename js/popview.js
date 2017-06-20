@@ -3,6 +3,7 @@
 
 (function(){
 	function Popview(Observer){
+        var provinceID = {11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙",21:"辽宁",22:"吉林",23:"黑龙江",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",51:"四川",51:"重庆",52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"新疆"};
 		var popview={};
 		var width = 500;
         var height = 600;
@@ -233,10 +234,24 @@
                 url: "http://182.254.134.126:9494/get_province_distributed_by_barid",
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
-                data: JSON.stringify({id:333}),
+                data: JSON.stringify({id:id}),
                 success: function(data) {
-                    console.log(data.res);
                     if(data.status==0){return;}
+                    //console.log(data.res);
+                    var pie = d3.layout.pie().sort(null).value(function(d){return d["nums"];})(data.res);
+                    d3.selectAll(".p4_0")
+                        .data(pie)
+                        .attr('d', function(d){
+                            return arc(d);
+                        });
+                    d3.selectAll(".p4_0t")
+                        .data(pie)
+                        .attr("transform",function(d){
+                            return "translate(" + arc.centroid(d) + ")";
+                        })
+                        .text(function(d,i){
+                            return provinceID[d.data["provinceID"]]+": "+d.data["nums"];
+                        });
                 },
                 error: function(message) {
                     console.log("fail");
@@ -250,7 +265,7 @@
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:333}),
                 success: function(data) {
-                    console.log(data.res);
+                    //console.log(data.res);
                     if(data.status==0){return;}
                 },
                 error: function(message) {
@@ -265,7 +280,7 @@
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:333}),
                 success: function(data) {
-                    console.log(data.res);
+                    //console.log(data.res);
                     if(data.status==0){return;}
                 },
                 error: function(message) {
@@ -280,7 +295,7 @@
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:333}),
                 success: function(data) {
-                    console.log(data.res);
+                    //console.log(data.res);
                     if(data.status==0){return;}
                 },
                 error: function(message) {
@@ -288,26 +303,12 @@
                 }
             }); 
             d3.json("test.json",function(error,data){
-                var pie = d3.layout.pie().sort(null).value(function(d){return d;})(data[0]);
-                d3.selectAll(".p4_0")
-                    .data(pie)
-                    .attr('d', function(d){
-                        return arc(d);
-                    })
-                d3.selectAll(".p4_0t")
-                    .data(pie)
-                    .attr("transform",function(d){
-                        return "translate(" + arc.centroid(d) + ")";
-                    })
-                    .text(function(d){
-                        return d.data;
-                    });
                 var pie = d3.layout.pie().sort(null).value(function(d){return d;})(data[1]);
                 d3.selectAll(".p4_1")
                     .data(pie)
                     .attr('d', function(d){
                         return arc(d);
-                    });
+                    })
                 d3.selectAll(".p4_1t")
                     .data(pie)
                     .attr("transform",function(d){
@@ -316,6 +317,7 @@
                     .text(function(d){
                         return d.data;
                     });
+                
                 d3.selectAll(".p4_2_1")
                     .data(data[2][0])
                     .attr("x1", function(d,i){
