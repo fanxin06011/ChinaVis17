@@ -226,60 +226,21 @@
             var temp_min = params.batch[0].areas[0]["coordRange"];
             temp_min[1]=Math.ceil(temp_min[1]);
             temp_min[0]=Math.floor(temp_min[0]);
+            var sentPerson = [];
+            for(var m = temp_min[0];m<=temp_min[1];m++)
+            {
+                sentPerson.push(categories[m]);
+            }
+
             var sentData = {
                 Status : first_flag,
                 index  : temp_min,
-                personid : categories
+                personid : sentPerson
             }
             console.log(sentData);
             Observer.fireEvent("Selected_id",sentData,Crime);
-            /*
-            var mainSeries = params.batch[0].selected[0];
-
-            var selectedItems = [];
-            var categoryData = [];
-            var barData = [];
-            var maxBar = 30;
-            var sum = 0;
-            var count = 0;
-
-            for (var i = 0; i < mainSeries.dataIndex.length; i++) {
-                var rawIndex = mainSeries.dataIndex[i];
-                var dataItem = convertedData[0][rawIndex];
-                var pmValue = dataItem.value[2];
-
-                sum += pmValue;
-                count++;
-
-                selectedItems.push(dataItem);
-            }
-
-            selectedItems.sort(function (a, b) {
-                return a.value[2] - b.value[2];
-            });
-
-            for (var i = 0; i < Math.min(selectedItems.length, maxBar); i++) {
-                categoryData.push(selectedItems[i].name);
-                barData.push(selectedItems[i].value[2]);
-            }
-
-            this.setOption({
-                yAxis: {
-                    data: categoryData
-                },
-                xAxis: {
-                    axisLabel: {show: !!count}
-                },
-                title: {
-                    id: 'statistic',
-                    text: count ? '平均: ' + (sum / count).toFixed(4) : ''
-                },
-                series: {
-                    id: 'bar',
-                    data: barData
-                }
-            });
-            */
+         
+            
         }
 
 
