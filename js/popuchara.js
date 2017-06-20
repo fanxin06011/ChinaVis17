@@ -9,8 +9,8 @@
 		*/
 		var width1 = 500;
 		var width2 = 500;
-		var height1 = 290;
-		var height2 = 200;
+		var height1 = 330;
+		var height2 = 130;
 		var padding2 = {top:10,right:10,bottom:30,left:50};
 
 
@@ -34,11 +34,15 @@
             this.num = num;
             this.setavgtime = setavgtime;
             this.equal = equal;
+            this.settimeperhour = settimeperhour;
             function setavgtime(time) {
                 this.avgtime = time;
             }
             function equal(namestr) {
                 return (namestr == this.name);
+            }
+            function settimeperhour(data) {
+            	this.timeperhour = data;
             }
         }
 
@@ -78,6 +82,29 @@
                     }
                 }
             });
+
+            //this data is just for test
+            for(var i=0; i<provinces.length; i++)
+            	provinces[i].settimeperhour([0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60]);
+            //and should replaced by the following(if the columns are province,0,1,2,...23)
+            /*d3.csv("data/province_avg_time_per_hour.csv", function(error, timedata2) {
+                if(error) console.log(error);
+                for(var i=0; i<timedata2.length; i++) {
+                    var j;
+                    for(j=0; j<provinces.length; j++)
+                        if(provinces[j].code == timedata[i]["province"]) break;
+                    if(j<provinces.length) {
+                    	var timeperhour = [];
+                    	for(var k=0; k<24; k++) {
+                    		var time = parseFloat(timedata2[i][""+k]);
+                    		time = time.toFixed(2);
+                    		timeperhour.push(time);
+                    	}
+                        provinces[j].settimeperhour(timeperhour);
+                    }
+                }
+            });*/
+            
             console.log(provinces);
             DrawChinaMap();
         });
@@ -87,8 +114,8 @@
 		function DrawChinaMap() {
     		var projection = d3.geo.mercator()
         		.center([107, 31])
-        		.scale(350)
-        		.translate([width1/2+20, height1/2+60]);
+        		.scale(300)
+        		.translate([width1/2+20, height1/2+40]);
     		var path = d3.geo.path()  
         		.projection(projection);
     		d3.json("china.json", function(error, root) {
@@ -164,6 +191,7 @@
                             }
                         }
                         DrawProvinceLine();
+                        //SendMessage();
             		})
     		});
     
@@ -180,11 +208,10 @@
     		var DrawData = [];
             var DrawColor = [];
             var DrawProvince = [];
-            /*just for test*/
-    		var select = [0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60];
+
             for (var i=0; i<selectData.length; i++) {
                 if(selectData[i] != -1) {
-                    DrawData.push(select);
+                    DrawData.push(provinces[selectData[i]].timeperhour);
                     DrawColor.push(color[i]);
                     DrawProvince.push(provinces[selectData[i]].name);
                 }
@@ -218,7 +245,7 @@
     		var yAxis = d3.svg.axis()
                   .scale(yScale)
                   .orient("left")
-                  .ticks(10);
+                  .ticks(6);
     		var yBar = svg2.append("g")
                   .attr("id","yaxis")
                   .attr("class", "axis")
@@ -287,7 +314,15 @@
                     });
             }
 		}
-		//Observer.fireEvent("event_name",dataSend,Popuchara);
+		/*function SendMessage() {
+			var dataSend = [];
+			$.ajax({
+				type: "POST",
+				url: "http://182.254.134.126:9494"
+			})
+			Observer.fireEvent("event_name",dataSend,Popuchara);
+		}*/
+		
 		
 		popuchara.onMessage = function(message, data, from){
 			if(message == "bar_selected"){
