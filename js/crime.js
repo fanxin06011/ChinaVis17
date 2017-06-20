@@ -4,6 +4,7 @@
 (function(){
 	function Crime(Observer){
 		var crime={};
+        var first_flag=0;
 		/*
 		code here
 		*/
@@ -155,6 +156,20 @@
                 height:domheight - 50,
                 top:10
             },
+
+
+
+            
+            brush: {
+                yAxisIndex: 'all',
+                brushLink: 'all',
+                outOfBrush: {
+                colorAlpha: 0.1
+                },
+                throttleType: 'debounce',
+                throttleDelay: 300,
+        },
+
             xAxis: {
                 min: startTime,
                 scale: true,
@@ -202,13 +217,93 @@
         };
 
         myChart.setOption(option);
+        myChart.on('brushSelected', renderBrushed);
 
+
+
+        function renderBrushed(params) {
+            console.log(params);
+            var temp_min = params.batch[0].areas[0]["coordRange"];
+            temp_min[1]=Math.ceil(temp_min[1]);
+            temp_min[0]=Math.floor(temp_min[0]);
+            var sentData = {
+                Status : first_flag,
+                index  : temp_min,
+                personid : categories
+            }
+            console.log(sentData);
+            Observer.fireEvent("Selected_id"sentData,Crime);
+            /*
+            var mainSeries = params.batch[0].selected[0];
+
+            var selectedItems = [];
+            var categoryData = [];
+            var barData = [];
+            var maxBar = 30;
+            var sum = 0;
+            var count = 0;
+
+            for (var i = 0; i < mainSeries.dataIndex.length; i++) {
+                var rawIndex = mainSeries.dataIndex[i];
+                var dataItem = convertedData[0][rawIndex];
+                var pmValue = dataItem.value[2];
+
+                sum += pmValue;
+                count++;
+
+                selectedItems.push(dataItem);
+            }
+
+            selectedItems.sort(function (a, b) {
+                return a.value[2] - b.value[2];
+            });
+
+            for (var i = 0; i < Math.min(selectedItems.length, maxBar); i++) {
+                categoryData.push(selectedItems[i].name);
+                barData.push(selectedItems[i].value[2]);
+            }
+
+            this.setOption({
+                yAxis: {
+                    data: categoryData
+                },
+                xAxis: {
+                    axisLabel: {show: !!count}
+                },
+                title: {
+                    id: 'statistic',
+                    text: count ? '平均: ' + (sum / count).toFixed(4) : ''
+                },
+                series: {
+                    id: 'bar',
+                    data: barData
+                }
+            });
+            */
+        }
+
+
+
+        
+
+            myChart.dispatchAction({
+            type: 'brush',
+            areas: [
+            {
+                brushType: 'lineY',
+                coordRange: [categories.length/3, categories.length/2],
+                yAxisIndex: 0
+            }
+            ]
+            });
+    
      
 
         function getnewdataid(bar_id)
         {
             var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S");
             console.log("aa");
+            first_flag = 1;
             //console.log({beginTime:parseTime(data.values.min), endTime:parseTime(data.values.max)});
             console.log(bar_id);
             console.log(selected_time_min);
@@ -344,7 +439,7 @@
                 myChart.setOption(option);
                 myChart.setOption(option);
 
-                    //Observer.fireEvent("problem3_timerange",data.res,Crime);
+        //Observer.fireEvent("problem3_timerange",data.res,Crime);
                 },
                 error: function(message) {
                    
