@@ -55,3 +55,4 @@ var example = Example(obs);
 var popview = Popview(obs);
 var popuchara = Popuchara(obs);
 var crime = Crime(obs);
+var calender = Calender(obs);

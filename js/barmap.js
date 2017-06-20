@@ -241,7 +241,8 @@
 			type: 'heatmap',
 			coordinateSystem: 'geo',
 			//maxOpacity:0.5,
-			//blurSize:10,
+			blurSize:15,
+			pointSize:2,
 			//markPoint:{symbolSize:1},
 			data: convertData2([{}])
 		};
@@ -884,6 +885,7 @@
 						re0();
 						console.log("problem3_timerange");
 						problem2barobj=data;
+						//console.log(data);
 						mapoption3.series[0].data=convertData3(data);
 
 						var tmp=_.pluck(data,"nums");

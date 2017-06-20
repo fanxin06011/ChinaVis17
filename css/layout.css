@@ -52,6 +52,16 @@ text.mono{
 	top:70%;left:0%;
 	width:100%;height:30%;
 }
+#bottom_view #Chart{
+	width:80%;height:80%;
+}
+#bottom_view #slider{
+	width:80%;height:20%;
+}
+#bottom_view #people_calender{
+	position: absolute;
+	top:0%;height:100%;
+}
 #bar_filter_timerange{
 	position: absolute;
 	top:0%;left:0%;
