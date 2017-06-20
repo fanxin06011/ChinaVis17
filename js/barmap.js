@@ -115,10 +115,21 @@
 		};
 		var convertData2 = function (data) {
 			var res = [];
+			let tmpidarr=_.pluck(bardata,"barID");
 			for (var i = 0; i < data.length; i++) {
-				var geoCoord = geoCoordMap[data[i].name];
+				let tmpii=_.indexOf(tmpidarr,data[i].id);
+				if(tmpii==-1){continue;}
+				let tmpsiteid=bardata[tmpii].name;
+				var geoCoord = geoCoordMap[tmpsiteid];
+				//console.log(tmpii);console.log(tmpsiteid);
 				if (geoCoord) {
-					res.push(geoCoord.concat(data[i].value));
+					res.push({
+						SITEID: tmpsiteid,
+						barID:data[i].id,
+						value: geoCoord.concat(data[i].value),
+						COUNT: data[i]["nums"]
+					});
+					//res.push(geoCoord.concat(data[i]["COUNT(*)"]));
 				}
 			}
 			return res;
@@ -128,6 +139,7 @@
 			let tmpidarr=_.pluck(bardata,"barID");
 			for (var i = 0; i < data.length; i++) {
 				let tmpii=_.indexOf(tmpidarr,data[i].ID);
+				if(tmpii==-1){continue;}
 				let tmpsiteid=bardata[tmpii].name;
 				var geoCoord = geoCoordMap[tmpsiteid];
 				//console.log(tmpii);console.log(tmpsiteid);
@@ -228,6 +240,9 @@
 			name: 'p3',
 			type: 'heatmap',
 			coordinateSystem: 'geo',
+			//maxOpacity:0.5,
+			//blurSize:10,
+			//markPoint:{symbolSize:1},
 			data: convertData2([{}])
 		};
 		mapoption2.visualMap={
@@ -845,12 +860,14 @@
 			}
 			
 			if(message == "problem2"){
-				//if(from == Iphist ){
+				if(from == Popuchara ){
+					console.log(data);
+					console.log(data[0]);
 					problem2barobj=data;
 					if(barmap.mode==2){
 						//$("#problem_1").hide();
 						re0();
-						let tmp=_.pluck(data,"value");
+						let tmp=_.pluck(data,"nums");
 						//console.log(tmp);
 						mapoption2.visualMap.min=_.min(tmp);
 						mapoption2.visualMap.max=_.max(tmp);
@@ -859,13 +876,13 @@
 						mapoption2.series[0].data=convertData2(problem2barobj);
 						mapChart.setOption(mapoption2, true);
 					}
-				//}
+				}
 			}
 			if(message == "problem3_timerange"){
 				if(from == Crime ){
 					if(barmap.mode==3){
 						re0();
-						//console.log(data);
+						console.log("problem3_timerange");
 						problem2barobj=data;
 						mapoption3.series[0].data=convertData3(data);
 
