@@ -7,13 +7,25 @@
         /*
         code here
         */
-        var width = 600;
-        var height = 450;
-        var svg = d3.select("#china_map").append("svg")
-               .attr("width",width)
-               .attr("height",height);
+        var width1 = 500;
+        var width2 = 500;
+        var height1 = 330;
+        var height2 = 130;
+        var padding2 = {top:10,right:10,bottom:30,left:50};
+
+        var svg1 = d3.select("#china_map").append("svg")
+                 .attr("width",width1)
+                 .attr("height",height1);
+        var svg2 = d3.select("#province_line").append("svg")
+                 .attr("width",width2)
+                 .attr("height",height2);
 
         var provinces = [];
+
+        var color = ["#FFDDAA", "#FFBB66", "#FFAA33", "#FF8800", "#CC6600", "#FF5511"];
+        var selectData = [];
+        for(var i=0; i<6; i++)
+            selectData.push(-1);
 
         var colorlinear;
         var a = d3.rgb(199,223,251);    //less  
@@ -27,12 +39,25 @@
             this.num = num;
             this.setavgtime = setavgtime;
             this.equal = equal;
+            this.settimeperhour = settimeperhour;
             function setavgtime(time) {
                 this.avgtime = time;
             }
             function equal(namestr) {
                 return (namestr == this.name);
             }
+            function settimeperhour(data) {
+                this.timeperhour = data;
+            }
+        }
+  
+        function choosecolor() {
+            for(var i=0; i<selectData.length; ++i) {
+                if(selectData[i] == -1)
+                    return i;
+            }
+            alert("You can choose at most 6 colors");
+            return -1;
         }
 
         function checkhasdata(str) {
@@ -69,6 +94,31 @@
                                 .domain([min,max])
                                 .range([0,1]);
                 //console.log(allavgtime);
+                
+
+                //this data is just for test
+                for(var i=0; i<provinces.length; i++)
+                    provinces[i].settimeperhour([0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60]);
+                //and should replaced by the following(if the columns are province,0,1,2,...23)
+                /*d3.csv("data/province_avg_time_per_hour.csv", function(error, timedata2) {
+                    if(error) console.log(error);
+                    for(var i=0; i<timedata2.length; i++) {
+                        var j;
+                        for(j=0; j<provinces.length; j++)
+                            if(provinces[j].code == timedata[i]["province"]) break;
+                        if(j<provinces.length) {
+                            var timeperhour = [];
+                            for(var k=0; k<24; k++) {
+                                var time = parseFloat(timedata2[i][""+k]);
+                                time = time.toFixed(2);
+                                timeperhour.push(time);
+                            }
+                            provinces[j].settimeperhour(timeperhour);
+                        }
+                    }
+                });*/           
+                console.log(provinces);
+
                 DrawRect(min, max);
                 DrawChinaMap();
             });
@@ -76,7 +126,7 @@
         
         
         function DrawRect(min, max) {
-            var defs = svg.append("defs");  
+            var defs = svg1.append("defs");  
             var linearGradient = defs.append("linearGradient")  
                         .attr("id","linearColor")  
                         .attr("x1","0%")  
@@ -92,24 +142,24 @@
                 .attr("offset","100%")  
                 .style("stop-color",b.toString());
 
-            var colorRect = svg.append("rect")  
+            var colorRect = svg1.append("rect")  
                 .attr("x", 30)  
-                .attr("y", 380)  
+                .attr("y", 250)  
                 .attr("width", 100)  
                 .attr("height", 20)  
                 .style("fill","url(#" + linearGradient.attr("id") + ")");
-            var minValueText = svg.append("text")
+            var minValueText = svg1.append("text")
                     .attr("class","text")
                     .attr("x", 25)
-                    .attr("y", 410)
+                    .attr("y", 240)
                     .attr("fill", "white")
                     .attr("font-size", 12)
                     .text(""+min);
 
-            var maxValueText = svg.append("text")
+            var maxValueText = svg1.append("text")
                     .attr("class","text")
                     .attr("x", 120)
-                    .attr("y", 410)
+                    .attr("y", 240)
                     .attr("fill", "white")
                     .attr("font-size", 12)
                     .text(""+max);
@@ -119,8 +169,8 @@
         function DrawChinaMap() {
             var projection = d3.geo.mercator()
                 .center([107, 31])
-                .scale(450)
-                .translate([width/2, height/2+60]);
+                .scale(300)
+                .translate([width1/2+20, height1/2+40]);
             var path = d3.geo.path()  
                 .projection(projection);
             var selectname = "";
@@ -128,7 +178,7 @@
             d3.json("china.json", function(error, root) {
                 if (error) 
                     return console.error(error);
-                svg.selectAll("path")
+                svg1.selectAll("path")
                     .data( root.features )
                     .enter()
                     .append("path")
@@ -156,7 +206,7 @@
                         var mousePos = d3.mouse(d3.select("#china_map").node());
                         d3.select(this).attr("fill","#2a333d");
 
-                        var tips = svg.append("g")
+                        var tips = svg1.append("g")
                                 .attr("class", "tips");
                         var tipText = tips.append("text")
                                 .attr("class", "tips")
@@ -192,8 +242,10 @@
                         if(d3.select(this).attr("select") == 0) {
                             d3.select(this).attr("fill", d3.select(this).attr("color"));
                         }
-                        else
-                            d3.select(this).attr("fill", "#f6b26b")
+                        else {
+                            var co = d3.select(this).attr("select")-1;
+                            d3.select(this).attr("fill", color[co]);
+                        }
                         d3.selectAll('.tips').remove();
                     })
                     .on("click", function(d,i){
@@ -203,24 +255,149 @@
                                 alert("there is no data for this province");
                                 return;
                             }
-                            if(selectname!="") {
-                                d3.select("#" + selectname).attr("fill", d3.select("#" + selectname).attr("color"));
-                                d3.select("#" + selectname).attr("select", 0);
+                            var ci = choosecolor();
+                            if(ci != -1) {
+                                d3.select(this).attr("select", ci+1);
+                                d3.select(this).attr("fill", color[ci]);
+                                selectData[ci] = index;
                             }
-                            d3.select(this).attr("fill", "#f6b26b");
-                            d3.select(this).attr("select", 1);
                             selectname = d.properties.name;
-                            
                         } else {
                             d3.select(this).attr("select", 0);
                             d3.select(this).attr("fill", d3.select(this).attr("color"));
                             selectname = "";
+                            var index = d3.select(this).attr("provinceindex");
+                            for(var j=0; j<selectData.length; j++) {
+                                if(selectData[j] == index)
+                                    selectData[j] = -1;
+                            }
                         }
+                        DrawProvinceLine();
                         SendMessage(selectname);
                     })
             });
     
         }
+
+        function DrawProvinceLine() {
+            console.log(selectData);
+            d3.select("#province_line").select("#yaxis").remove();
+            d3.select("#province_line").select("#xaxis").remove();
+            d3.select("#province_line").selectAll("circle").remove();
+            d3.select("#province_line").selectAll("path").remove();
+            d3.select("#province_line").selectAll("text").remove();
+  
+            var DrawData = [];
+            var DrawColor = [];
+            var DrawProvince = [];
+
+            for (var i=0; i<selectData.length; i++) {
+                if(selectData[i] != -1) {
+                    DrawData.push(provinces[selectData[i]].timeperhour);
+                    DrawColor.push(color[i]);
+                    DrawProvince.push(provinces[selectData[i]].name);
+                }
+            }
+
+            var mindataset = [];
+            var maxdataset = [];
+            for(var i=0; i<DrawData.length; ++i) {
+                mindataset.push(Math.min.apply(null, DrawData[i]));
+                maxdataset.push(Math.max.apply(null, DrawData[i]));
+            }
+
+            var maxdata = Math.max.apply(null, maxdataset);
+            var mindata = Math.min.apply(null, mindataset);
+
+
+            var xScale = d3.scale.linear()
+                    .domain([0,23])
+                    .range([padding2.left,width2-padding2.right]);
+            var xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient("bottom")
+                    .ticks(24)
+            var xBar = svg2.append("g")
+                    .attr("id", "xaxis")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(0," + (height2 - padding2.bottom) + ")")
+                    .call(xAxis);
+            var yScale = d3.scale.linear()
+                    .domain([mindata,maxdata])
+                    .range([height2-padding2.bottom,padding2.top]);
+            var yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left")
+                    .ticks(6);
+            var yBar = svg2.append("g")
+                    .attr("id","yaxis")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(" + padding2.left + ",0)")
+                    .call(yAxis);
+
+            for(var j=0; j<DrawData.length; j++) {
+                var data = DrawData[j];
+                var colorname = DrawColor[j];
+                var proname = DrawProvince[j];
+
+                var circleLoc = [];
+                for(var k=0; k<24; ++k)
+                    circleLoc.push([xScale(k),yScale(parseFloat(data[k]))]);
+
+                svg2.selectAll("circle")
+                    .data(circleLoc)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d, i) {
+                        return d[0];
+                    })
+                    .attr("cy", function(d, i) {
+                        return d[1];
+                    })
+                    .attr("r",3)
+                    .attr("fill", colorname)
+                    .on("mouseover", function(d, i) {
+                        str = "" + data[i];
+                        var tx = parseFloat(d3.select(this).attr("cx"));
+                        var ty = parseFloat(d3.select(this).attr("cy"));
+                        var tips = svg2.append("g")
+                                      .attr("class", "tips");
+                        var tipText = tips.append("text")
+                                      .attr("class", "tips")
+                                      .text(str)
+                                      .attr("x", tx + 10)
+                                      .attr("y", ty)
+                                      .attr("fill", "white")
+                                      .attr("font-size", 12);
+                    })
+                    .on("mouseout", function(d, i) {
+                        d3.selectAll(".tips").remove();
+                    });
+
+                var linePath = d3.svg.line();
+                svg2.append("path")
+                    .attr("d",linePath(circleLoc))
+                    .attr("stroke",colorname)
+                    .attr("stroke-width","1px")
+                    .attr("fill","none")
+                    .on("mouseover", function(d, i) {
+                        var mousePos = d3.mouse(d3.select("#province_line").node());
+                        var tips = svg2.append("g")
+                                    .attr("class", "tips");
+                        var tipText = tips.append("text")
+                                    .attr("class", "tips")
+                                    .text(DrawProvince)
+                                    .attr("x", mousePos[0] + 10)
+                                    .attr("y", mousePos[1] + 10)
+                                    .attr("fill", "white")
+                                    .attr("font-size", 12);
+                    })
+                    .on("mouseout", function(d, i) {
+                        d3.selectAll(".tips").remove();
+                    });
+            }
+        }
+
 
         function SendMessage(name) {
             var Senddata = [];
@@ -229,13 +406,13 @@
                 var id = provinces[index].code;
                 $.ajax({
                     type: "POST",
-                    url: "http://182.254.134.126:9494/get_personnums_distributed_by_provinceid",
+                    url: "http://127.0.0.1:9494/get_personnums_distributed_by_provinceid",
                     dataType: "json",
                     contentType: "application/json;charset=utf-8",
                     data:JSON.stringify({provinceID:id}),
                     success: function(data) {
                         Senddata = data.res;
-                        //console.log(Senddata);
+                        console.log(Senddata);
                         Observer.fireEvent("problem2",Senddata,Popuchara);
                     },
                     error: function(message) {
@@ -252,7 +429,7 @@
         popuchara.onMessage = function(message, data, from){
             if(message == "bar_selected"){
                 if(from == Barmap ){
-                    console.log(data);
+                    //console.log(data);
                 }
             }
         };
