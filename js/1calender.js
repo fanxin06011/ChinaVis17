@@ -251,7 +251,7 @@
 			console.log("query people "+people[dataind]);
 			$.ajax({
 				type: "POST",
-				url: "http://182.254.134.126:9494/get_record_by_personid",
+				url: "http://127.0.0.1:9494/get_record_by_personid",
 				dataType: "json",
 				contentType: "application/json;charset=utf-8",
 				data: JSON.stringify({personid:people[dataind]}),

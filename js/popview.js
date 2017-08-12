@@ -231,7 +231,7 @@
             //top3TODO
             $.ajax({
                 type: "POST",
-                url: "http://182.254.134.126:9494/get_province_distributed_by_barid",
+                url: "http://127.0.0.1:9494/get_province_distributed_by_barid",
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:id}),
@@ -260,7 +260,7 @@
             //饼图TODO
             $.ajax({
                 type: "POST",
-                url: "http://182.254.134.126:9494/get_province_distributed_by_barid",
+                url: "http://127.0.0.1:9494/get_province_distributed_by_barid",
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:333}),
@@ -275,7 +275,7 @@
             //折线图TODO
             $.ajax({
                 type: "POST",
-                url: "http://182.254.134.126:9494/get_province_distributed_by_barid",
+                url: "http://127.0.0.1:9494/get_province_distributed_by_barid",
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:333}),
@@ -290,7 +290,7 @@
             //柱状图TODO
             $.ajax({
                 type: "POST",
-                url: "http://182.254.134.126:9494/get_province_distributed_by_barid",
+                url: "http://127.0.0.1:9494/get_province_distributed_by_barid",
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({id:333}),

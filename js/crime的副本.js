@@ -2,7 +2,6 @@
 
 
 (function(){
-    var sentData;
 	function Crime(Observer){
 		var crime={};
         var first_flag=0;
@@ -132,19 +131,6 @@
             legend: {
                 data: ['bar', 'error']
             },
-             toolbox: {
-                show: true,
-                feature: {
-                    myfunc:{
-                        show:true,
-                        title:"confirm",
-                        icon:'path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891',
-                        onclick: function (){
-                           confirm();
-                        }
-                        }
-                }
-            },
             dataZoom: [{
                 type: 'slider',
                 filterMode: 'weakFilter',
@@ -230,7 +216,6 @@
             }]
         };
 
-
         myChart.setOption(option);
         myChart.on('brushSelected', renderBrushed);
 
@@ -247,151 +232,21 @@
                 sentPerson.push(categories[m]);
             }
 
-            sentData = {
+            var sentData = {
                 Status : first_flag,
                 index  : temp_min,
                 personid : sentPerson
             }
-            /*
-
-        */
-        
-        };
-
-
-
-        
-
-            myChart.dispatchAction({
-            type: 'brush',
-            areas: [
-            {
-                brushType: 'lineY',
-                coordRange: [categories.length/3, categories.length/2],
-                yAxisIndex: 0
-            }
-            ]
-            });
-        
-        function confirm()
-        {
-            var tmin=-1,tmax=-1;
             console.log(sentData);
-
             Observer.fireEvent("Selected_id",sentData,Crime);
          
-          
-            var gcate = [];
-            var gdata = [];
-            for(var i=0;i<=sentData.index[1];i++)
-            {
-                if(i >= sentData.index[0] && i <= sentData.index[1])
-                {
-                    gantt_data[i].value[0] = gcate.length;
-                    gcate.push(categories[i]);
-                    gdata.push(gantt_data[i]);
-                    if(tmin == -1 || tmin > gantt_data[i].value[1])
-                    {
-                        tmin = gantt_data[i].value[1];
-                    }
-                    if(tmax == -1 || tmax < gantt_data[i].value[2])
-                    {
-                        tmax = gantt_data[i].value[2]
-                    }
-
-                }
-            }
             
-              
-            gantt_data = [];
-            categories = [];
-            gantt_data = gdata;
-            categories = gcate;
-            console.log(gantt_data);
-            console.log(categories);
+        }
 
-            option = {
-            tooltip: {
-                formatter: function (params) {
-                    console.log(params);
-                    return categories[params.dataIndex] + params.name + ': ' + params.value[3] + ' ms';
-                }
-            },  
-            legend: {
-                data: ['bar', 'error']
-            },
-            dataZoom: [{
-                type: 'slider',
-                filterMode: 'weakFilter',
-                showDataShadow: false,
-                top: domheight-10,
-                height: 5,
-                borderColor: 'transparent',
-                backgroundColor: '#e2e2e2',
-                handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7v-1.2h6.6z M13.3,22H6.7v-1.2h6.6z M13.3,19.6H6.7v-1.2h6.6z', // jshint ignore:line
-                handleSize: 10,
-                handleStyle: {
-                    shadowBlur: 6,
-                    shadowOffsetX: 1,
-                    shadowOffsetY: 2,
-                    shadowColor: '#aaa'
-                },
-                labelFormatter: ''
-            }, {
-                type: 'inside',
-                filterMode: 'weakFilter'
-            }],
-            grid: {
-                height:domheight - 50,
-                top:10
-            },
-            xAxis: {
-                min: tmin,
-                scale: true,
-                axisLabel: {
-                    formatter: function (val) {
-                        return Math.max(0, val - startTime) + ' ms';
-                    },
-                textStyle: {
-                                color: 'white'
-                            }
-                },
-                axisLine:{
-                lineStyle:{
-                    color:'white'
-                }
-                }
-            },
-            yAxis: {
-                data: categories,
-                axisLabel:{
-                textStyle: {
-                                color: 'white'
-                            }
-                        },
-                axisLine:{
-                lineStyle:{
-                    color:'white'
-                }
-                }
-            },
-            series: [{
-                type: 'custom',
-                renderItem: renderItem,
-                itemStyle: {
-                    normal: {
-                        opacity: 0.8
-                    }
-                },
-                encode: {
-                    x: [1, 2],
-                    y: 0
-                },
-                data: gantt_data
-                }]
-            };
 
-            myChart.setOption(option);
+
+        
+
             myChart.dispatchAction({
             type: 'brush',
             areas: [
@@ -402,7 +257,7 @@
             }
             ]
             });
-        }
+    
      
 
         function getnewdataid(bar_id)
@@ -543,17 +398,7 @@
                 }]
             };
                 myChart.setOption(option);
-                myChart.dispatchAction({
-                type: 'brush',
-                areas: [
-                {
-                    brushType: 'lineY',
-                    coordRange: [categories.length/3, categories.length/2],
-                    yAxisIndex: 0
-                }
-                ]
-                });
-                //myChart.setOption(option);
+                myChart.setOption(option);
 
         //Observer.fireEvent("problem3_timerange",data.res,Crime);
                 },

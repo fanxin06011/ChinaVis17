@@ -388,7 +388,7 @@
 					console.log({id:params.data.ind, left:durationbrushrange[0]*timeinterval, right:durationbrushrange[1]*timeinterval});
 					$.ajax({
 						type: "POST",
-						url: "http://182.254.134.126:9494/get_personinfo_by_duration_and_barid",
+						url: "http://127.0.0.1:3306/get_personinfo_by_duration_and_barid",
 						dataType: "json",
 						contentType: "application/json;charset=utf-8",
 						data: JSON.stringify({id:params.data.ind, left:durationbrushrange[0]*timeinterval, right:durationbrushrange[1]*timeinterval}),
@@ -725,7 +725,7 @@
 					//console.log("start query duration from "+readstart2+" to "+readend2);
 					$.ajax({
 						type: "POST",
-						url: "http://182.254.134.126:9494/get_bar_id_by_duration",
+						url: "http://127.0.0.1:3306/get_bar_id_by_duration",
 						dataType: "json",
 						contentType: "application/json;charset=utf-8",
 						data: JSON.stringify({left:readstart2, right:readend2}),
