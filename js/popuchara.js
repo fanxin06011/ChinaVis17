@@ -40,6 +40,7 @@
             this.setavgtime = setavgtime;
             this.equal = equal;
             this.settimeperhour = settimeperhour;
+            this.timeperhour = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
             function setavgtime(time) {
                 this.avgtime = time;
             }
@@ -97,30 +98,31 @@
                 
 
                 //this data is just for test
-                for(var i=0; i<provinces.length; i++)
-                    provinces[i].settimeperhour([0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60]);
+                /*for(var i=0; i<provinces.length; i++)
+                    provinces[i].settimeperhour([0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60,0,10,20,10,50,60]);*/
                 //and should replaced by the following(if the columns are province,0,1,2,...23)
-                /*d3.csv("data/province_avg_time_per_hour.csv", function(error, timedata2) {
+                d3.csv("data/province_time.csv", function(error, timedata2) {
                     if(error) console.log(error);
                     for(var i=0; i<timedata2.length; i++) {
                         var j;
                         for(j=0; j<provinces.length; j++)
-                            if(provinces[j].code == timedata[i]["province"]) break;
+                            if(provinces[j].code == timedata2[i]["province"]) break;
                         if(j<provinces.length) {
                             var timeperhour = [];
-                            for(var k=0; k<24; k++) {
-                                var time = parseFloat(timedata2[i][""+k]);
-                                time = time.toFixed(2);
-                                timeperhour.push(time);
-                            }
+                            for(var k=0; k<24; k++)
+                                timeperhour.push(timedata2[i][""+k] / provinces[j].num);
+                            //console.log(provinces[j].code);
+                            //console.log(timeperhour);
                             provinces[j].settimeperhour(timeperhour);
                         }
                     }
-                });*/           
-                console.log(provinces);
+                    console.log(provinces);
+                }); 
+                
 
                 DrawRect(min, max);
                 DrawChinaMap();
+                DrawProvinceLine()
             });
         });
         
@@ -273,7 +275,7 @@
                             }
                         }
                         DrawProvinceLine();
-                        SendMessage(selectname);
+                        //SendMessage(selectname);
                     })
             });
     
@@ -335,17 +337,47 @@
                     .attr("transform", "translate(" + padding2.left + ",0)")
                     .call(yAxis);
 
+            var allcircle = [];
+            var paths = [];
+
             for(var j=0; j<DrawData.length; j++) {
                 var data = DrawData[j];
                 var colorname = DrawColor[j];
                 var proname = DrawProvince[j];
 
                 var circleLoc = [];
-                for(var k=0; k<24; ++k)
+                for(var k=0; k<24; ++k) {
                     circleLoc.push([xScale(k),yScale(parseFloat(data[k]))]);
+                    allcircle.push([xScale(k),yScale(parseFloat(data[k]))]);
+                }
 
-                svg2.selectAll("circle")
-                    .data(circleLoc)
+                var linePath = d3.svg.line();
+                paths.push(linePath(circleLoc));
+                //console.log(paths);
+                svg2.append("path")
+                    .attr("d",linePath(circleLoc))
+                    .attr("stroke",colorname)
+                    .attr("stroke-width","1px")
+                    .attr("fill","none")
+                    .on("mouseover", function(d, i) {
+                        var mousePos = d3.mouse(d3.select("#province_line").node());
+                        var tips = svg2.append("g")
+                                    .attr("class", "tips");
+                        var tipText = tips.append("text")
+                                    .attr("class", "tips")
+                                    .text(DrawProvince[j])
+                                    .attr("x", mousePos[0] + 10)
+                                    .attr("y", mousePos[1] + 10)
+                                    .attr("fill", "white")
+                                    .attr("font-size", 12);
+                    })
+                    .on("mouseout", function(d, i) {
+                        d3.selectAll(".tips").remove();
+                    });
+            }
+
+            svg2.selectAll("circle")
+                    .data(allcircle)
                     .enter()
                     .append("circle")
                     .attr("cx", function(d, i) {
@@ -355,9 +387,12 @@
                         return d[1];
                     })
                     .attr("r",3)
-                    .attr("fill", colorname)
+                    .attr("fill", function(d,i) {
+                        var cindex = parseInt(i / 24);
+                        return DrawColor[cindex];
+                    })
                     .on("mouseover", function(d, i) {
-                        str = "" + data[i];
+                        str = "" + DrawData[parseInt(i / 24)][i-parseInt(i / 24)*24].toFixed(2);
                         var tx = parseFloat(d3.select(this).attr("cx"));
                         var ty = parseFloat(d3.select(this).attr("cy"));
                         var tips = svg2.append("g")
@@ -373,31 +408,7 @@
                     .on("mouseout", function(d, i) {
                         d3.selectAll(".tips").remove();
                     });
-
-                var linePath = d3.svg.line();
-                svg2.append("path")
-                    .attr("d",linePath(circleLoc))
-                    .attr("stroke",colorname)
-                    .attr("stroke-width","1px")
-                    .attr("fill","none")
-                    .on("mouseover", function(d, i) {
-                        var mousePos = d3.mouse(d3.select("#province_line").node());
-                        var tips = svg2.append("g")
-                                    .attr("class", "tips");
-                        var tipText = tips.append("text")
-                                    .attr("class", "tips")
-                                    .text(DrawProvince)
-                                    .attr("x", mousePos[0] + 10)
-                                    .attr("y", mousePos[1] + 10)
-                                    .attr("fill", "white")
-                                    .attr("font-size", 12);
-                    })
-                    .on("mouseout", function(d, i) {
-                        d3.selectAll(".tips").remove();
-                    });
-            }
         }
-
 
         function SendMessage(name) {
             var Senddata = [];
