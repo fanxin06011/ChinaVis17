@@ -14,6 +14,7 @@
 		
 		var people=["b9949157d649b5597d","f83aba720030f9b076","e0825f383acf9f19d7"];
 		var calenderdatareturn=[];
+		var calenderdatareturn2=[];
 		var timearr;
 		
 		var dom = document.getElementById("people_calender");
@@ -22,7 +23,7 @@
 		option = null;
 		var cellSize = [30, 30];
 		var pieRadius = 10;
-
+/*
 		function getVirtulData() {
 			var date = +echarts.number.parseDate('2016-11-01');
 			var end = +echarts.number.parseDate('2016-12-01');
@@ -40,13 +41,15 @@
 			console.log(data);console.log("getVirtulData");
 			return data;
 		}
+*/
 		function getVirtulData2() {
-			timearr=_.pluck(calenderdatareturn,"beginTime");
+			console.log(calenderdatareturn);
+			timearr=_.pluck(calenderdatareturn2,"beginTime");
 			timearr=_.map(timearr, function(num){ return num.split(" ")[0]; });
 			timearr=_.uniq(timearr);
-			//console.log(timearr);
-			var date = +echarts.number.parseDate('2016-11-01');
-			var end = +echarts.number.parseDate('2016-12-01');
+			console.log(timearr);
+			var date = +echarts.number.parseDate('2016-10-01');
+			var end = +echarts.number.parseDate('2016-11-01');
 			var data = [];
 			for(let i=0;i<timearr.length;i++){
 				let ttt=+echarts.number.parseDate(timearr[i]);
@@ -60,7 +63,7 @@
 			console.log(data);console.log("getRealData");
 			return data;
 		}
-		
+		/*
 		function getPieSeries(scatterData, chart) {
 			return echarts.util.map(scatterData, function (item, index) {
 				var center = chart.convertToPixel('calendar', item);
@@ -89,10 +92,13 @@
 				return rtd; 
 			});
 		}
-		
+		*/
 		function getPieSeries2(scatterData, chart) {
-			return echarts.util.map(scatterData, function (item, index) {
-				//console.log(item);
+			scatterData.sort();
+			console.log(scatterData);
+			var gg = echarts.util.map(scatterData, function (item, index) {
+				
+				console.log(calenderdatareturn2);
 				var center = chart.convertToPixel('calendar', item);
 				//console.log("getPieSeries-real");
 				var rtd={
@@ -109,20 +115,59 @@
 					radius: pieRadius,
 					data: []
 				};
-				let fff = _.filter(calenderdatareturn, function(obj){ 
-					let tt=obj.beginTime;
-					tt=tt.split(" ")[0];
-					return tt== item[0]; 
+
+				fff=_.pluck(calenderdatareturn2,"ID");
+				fff=_.uniq(fff);
+
+				var Ddata = [];
+				for(var a =0 ; a<fff.length;a++)
+				{
+					Ddata[a]=0;
+				}
+				
+				for (var a = 0; a < calenderdatareturn2.length;a++)
+				{
+
+					if(calenderdatareturn2[a].beginTime.split(" ")[0] == item[0])
+					{
+						var str1 = calenderdatareturn2[a].beginTime;
+						str1 = str1.replace(/-/g,"/");
+						var str2 = calenderdatareturn2[a].endTime;  
+						str2 = str2.replace(/-/g,"/");
+						var tmp_begin_date = new Date(str1);
+                        var tmp_end_date   = new Date(str2);
+                        var mid = Math.abs(tmp_end_date.getTime()-tmp_begin_date.getTime());
+                        Ddata[fff.indexOf(calenderdatareturn2[a].ID)] += mid;
+					}
+				};
+				console.log(item[0]);
+				console.log(Ddata);
+				for(let i=0;i<fff.length;i++){
+					rtd.data.push({name: fff[i], value: Ddata[i]});
+				}
+				console.log(rtd);
+
+				/*
+				let fff = _.filter(calenderdatareturn2, function(obj){ 
+					//console.log(obj.length);
+					
+						let tt=obj.beginTime;
+						tt=tt.split(" ")[0];
+						//console.log(tt);
+						return tt== item[0]; 
+					
 				});
-				//console.log(fff);
+				console.log(fff);
 				fff=_.pluck(fff,"ID");
 				fff=_.uniq(fff);
-				//console.log(fff);
 				for(let i=0;i<fff.length;i++){
 					rtd.data.push({name: fff[i], value: 1/fff.length});
 				}
+				*/
 				return rtd; 
 			});
+			
+			return gg;
 		}
 
 		function getPieSeriesUpdate(scatterData, chart) {
@@ -137,7 +182,7 @@
 		}
 
 		var scatterData;// = getVirtulData();
-
+		var datarange=[['2016-9'],['2016-10'],['2016-11']]
 		option = {
 			backgroundColor: '#404a59',
 			tooltip : {},
@@ -157,7 +202,7 @@
 					}
 				},
 				yearLabel: {
-					show: false,
+					show: true,
 					textStyle: {
 						fontSize: 5
 					}
@@ -172,9 +217,9 @@
 					borderColor:"white"
 				},
 				monthLabel: {
-					show: false
+					show: true
 				},
-				range: ['2016-11']
+				range: ['2016-10']
 			},
 			series: [{
 				id: 'label',
@@ -235,6 +280,7 @@
 		
 		function getdataajaxbyidarr(){
 			calenderdatareturn=[];
+			calenderdatareturn2=[];
 			getdataajax(0);
 		}
 		getdataajaxbyidarr();
@@ -262,9 +308,13 @@
 						return;
 					}
 					//push data
+					var tmp = [];
 					for(let i=0;i<data.res.length;i++){
-						calenderdatareturn.push(data.res[i]);
+						tmp.push(data.res[i]);
+						data.res[i].ID = people[dataind];
+						calenderdatareturn2.push(data.res[i]);
 					}
+					calenderdatareturn.push(tmp);
 					getdataajax(dataind+1);
 					
 				},
@@ -280,9 +330,18 @@
 				console.log(data.personid);
 				if(from == Crime){
 				//if(from == Crime && data.Status!=0){
-					
+					console.log(data);
 					people=data.personid;
 					getdataajaxbyidarr();
+					console.log("Got");
+					console.log(people);	
+
+					getdataajaxbyidarr();
+
+					catterData = getVirtulData2();
+					myChart.setOption({
+					series: getPieSeries2(scatterData, myChart)
+					});
 				}
 			}
 

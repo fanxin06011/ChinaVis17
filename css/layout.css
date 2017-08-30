@@ -60,7 +60,7 @@ text.mono{
 }
 #bottom_view #people_calender{
 	position: absolute;
-	top:0%;height:100%;
+	top:0%;height:100%;left: 10%;
 }
 #bar_filter_timerange{
 	position: absolute;
@@ -79,7 +79,11 @@ text.mono{
 	border-radius:10px;
 	z-index:999;
 }
-
+#botton_view{
+	position: absolute;
+	top:10%;left:0%;
+	width:5%;height:30%;
+}
 #p4_pop{
 	background-color: rgba(0,0,0,0.5);
 	width:500px;height:650px;
@@ -93,7 +97,33 @@ text.mono{
     fill: none;
     stroke: white;
     shape-rendering: crispEdges;
-}     	
+}     
+.btn1{   
+  position: absolute;
+  border:none;   
+  background-color:#404a59;  
+  color:white;  
+  width:5%;  
+  top:0%;
+}  	
+.btn2{  
+  position: absolute;
+  border:none;   
+  background-color:#404a59;  
+  color:white;  
+  width:5%;  
+  top:3%;
+}  
+.btn3{  
+  position: absolute;
+  border:none;   
+  background-color:#404a59;  
+  color:white;  
+  width:5%;  
+  top:6%;
+}  
+
+
 .tg {
 	border-collapse: collapse;
 	border-spacing: 0;

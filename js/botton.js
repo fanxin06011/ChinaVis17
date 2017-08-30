@@ -929,11 +929,6 @@
 			durationfilterbarnum=[];
 			durationbrushrange=-1;cusnumberrange=-1;
 		}
-
-
-
-		
-
 		/*
 		//problem2 test
 		setTimeout(function(){

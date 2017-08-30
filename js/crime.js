@@ -3,14 +3,15 @@
 
 (function(){
     var sentData;
+    var selected_time_min;
+    var selected_time_max;
+    var strt = "2016-10";
 	function Crime(Observer){
 		var crime={};
         var first_flag=0;
 		/*
 		code here
 		*/
-        var selected_time_min;
-        var selected_time_max;
 		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
       $("#slider").dateRangeSlider({
         bounds:{
@@ -246,11 +247,13 @@
             {
                 sentPerson.push(categories[m]);
             }
-
+            strt = (selected_time_min);
+            console.log(strt);
             sentData = {
                 Status : first_flag,
                 index  : temp_min,
-                personid : sentPerson
+                personid : sentPerson,
+                data: gantt_data
             }
             /*
 
@@ -280,7 +283,7 @@
 
             Observer.fireEvent("Selected_id",sentData,Crime);
          
-          
+            
             var gcate = [];
             var gdata = [];
             for(var i=0;i<=sentData.index[1];i++)
@@ -313,7 +316,7 @@
             option = {
             tooltip: {
                 formatter: function (params) {
-                    console.log(params);
+                    //console.log(params);
                     return categories[params.dataIndex] + params.name + ': ' + params.value[3] + ' ms';
                 }
             },  
