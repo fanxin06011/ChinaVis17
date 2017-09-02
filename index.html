@@ -46,9 +46,45 @@
 		<div id="china_map"></div>
 		<div id="province_line"></div>
 	</div>
-	
+	<div class="botton_view" id="botton">
+		<button id="button1" class="btn1">
+			Problem1</button>
+		<button id="button2" class="btn2">
+			Problem2</button>
+		<button id="button3" class="btn3">
+			Problem3</button>
+
+		<script>
+		var oBtn1 = document.getElementById('button1');
+    	oBtn1.onclick = function(){
+    		alert("Btn1 Clicked");
+    					barmap.mode=1;
+			//mode-1 问题一 不响应其他视图事件
+			//$("#problem_1").show();
+			re0();
+			//改变颜色大小
+			//colorlinear=function(ind,d){return '#abc';}
+			sizelinear=function(ind,d){return 8;};
+			reloadmap();
+        
+    	};
+
+    	var oBtn2 = document.getElementById('button2');
+    	oBtn2.onclick = function(){
+    					barmap.mode=2;
+        alert("Btn2 Clicked");
+    	};
+
+    	var oBtn3 = document.getElementById('button3');
+    	oBtn3.onclick = function(){
+    					barmap.mode=3;
+        alert("Btn3 Clicked");
+    	};
+
+		</script>
+	</div>	
 	<div class="main_view" id="bottom_view">
-		<div id="Chart" style="width: 1000px;height:180px;"></div>
+		<div id="Chart" style="width: 70%;height:180px;"></div>
 		<div id="slider" style="width: 1000px;"></div>
 		<div id="people_calender"></div>
 	</div>
