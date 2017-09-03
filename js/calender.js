@@ -2,13 +2,17 @@
 
 
 (function(){
+
+	var monL = 0;
+	var datarange;
+	var finnalrange;
 	function Calender(Observer){
 		var calender={};
 		
 		var availw=document.documentElement.clientWidth-1000;
 		var availh=$("#people_calender").css("height");
 		availh=parseInt(availh.split("p")[0])+20;
-		$("#people_calender").css("left",1000).css("width",availw).css("height",availh);
+		$("#people_calender").css("left",1050).css("width",availw).css("height",availh);
 		//console.log(availw+" "+availh);
 		//Observer.fireEvent("event_name",dataSend,Example);
 		
@@ -48,8 +52,23 @@
 			timearr=_.map(timearr, function(num){ return num.split(" ")[0]; });
 			timearr=_.uniq(timearr);
 			console.log(timearr);
+			console.log(monL);
+			if (monL == 0 || monL == 10)
+			{
 			var date = +echarts.number.parseDate('2016-10-01');
 			var end = +echarts.number.parseDate('2016-11-01');
+			}
+			else if (monL == 9)
+			{	
+			var date = +echarts.number.parseDate('2016-09-01');
+			var end = +echarts.number.parseDate('2016-10-01');
+			}
+			else if (monL == 11)
+			{
+
+			var date = +echarts.number.parseDate('2016-11-01');
+			var end = +echarts.number.parseDate('2016-12-01');
+			}
 			var data = [];
 			for(let i=0;i<timearr.length;i++){
 				let ttt=+echarts.number.parseDate(timearr[i]);
@@ -60,7 +79,10 @@
 					]);
 				}
 			}
-			console.log(data);console.log("getRealData");
+			console.log(data);
+			console.log("getRealData");
+
+
 			return data;
 		}
 		/*
@@ -96,9 +118,11 @@
 		function getPieSeries2(scatterData, chart) {
 			scatterData.sort();
 			console.log(scatterData);
+
+
 			var gg = echarts.util.map(scatterData, function (item, index) {
 				
-				console.log(calenderdatareturn2);
+				//console.log(calenderdatareturn2);
 				var center = chart.convertToPixel('calendar', item);
 				//console.log("getPieSeries-real");
 				var rtd={
@@ -140,8 +164,8 @@
                         Ddata[fff.indexOf(calenderdatareturn2[a].ID)] += mid;
 					}
 				};
-				console.log(item[0]);
-				console.log(Ddata);
+				//console.log(item[0]);
+				//console.log(Ddata);
 				for(let i=0;i<fff.length;i++){
 					rtd.data.push({name: fff[i], value: Ddata[i]});
 				}
@@ -182,7 +206,20 @@
 		}
 
 		var scatterData;// = getVirtulData();
-		var datarange=[['2016-9'],['2016-10'],['2016-11']]
+		var datarange=[['2016-9'],['2016-10'],['2016-11']];
+		var finnalrange = [];
+		if(monL == 0 || monL == 10)
+		{
+			finnalrange = datarange[1];
+		}
+		else if(monL == 9)
+		{
+			finnalrange = datarange[0];
+		}
+		else if(monL == 11)
+		{
+			finnalrange = datarange[2];
+		}
 		option = {
 			backgroundColor: '#404a59',
 			tooltip : {},
@@ -204,7 +241,7 @@
 				yearLabel: {
 					show: true,
 					textStyle: {
-						fontSize: 5
+						fontSize: 15
 					}
 				},
 				dayLabel: {
@@ -217,9 +254,9 @@
 					borderColor:"white"
 				},
 				monthLabel: {
-					show: true
+					show: false
 				},
-				range: ['2016-10']
+				range: finnalrange
 			},
 			series: [{
 				id: 'label',
@@ -287,14 +324,92 @@
 		function getdataajax(dataind){
 			if(dataind==people.length){
 				console.log("query id arr end");
-				console.log(calenderdatareturn);
+				console.log(calenderdatareturn2);
+
+					 datarange=[['2016-09'],['2016-10'],['2016-11']];
+					 finnalrange = [];
+					if(monL == 0 || monL == 10)
+					{
+						finnalrange = datarange[1];
+					}
+					else if(monL == 9)
+					{
+						finnalrange = datarange[0];
+					}
+					else if(monL == 11)
+					{
+						finnalrange = datarange[2];
+					}
+					
+
+					console.log(finnalrange);
+					option = {
+						backgroundColor: '#404a59',
+						tooltip : {},
+						calendar: {
+							top: 'middle',
+							left: 'left',
+							orient: 'vertical',
+							cellSize: cellSize,
+							splitLine:{
+								lineStyle:{
+									color:"white"
+								}
+							},
+							itemStyle:{
+								normal:{
+									color:"#5c6573"
+								} 
+							},
+							yearLabel: {
+								show: true,
+								textStyle: {
+									fontSize: 15
+								}
+							},
+							dayLabel: {
+								margin: 10,
+								firstDay: 1,
+								nameMap: ['日', '一', '二', '三', '四', '五', '六'],
+								textStyle: {
+									color: "white"
+								},
+								borderColor:"white"
+							},
+							monthLabel: {
+								show: false
+							},
+							range: finnalrange
+						},
+						series: [{
+							id: 'label',
+							type: 'scatter',
+							coordinateSystem: 'calendar',
+							symbolSize: 1,
+							label: {
+								normal: {
+									show: true,
+									formatter: function (params) {
+										return echarts.format.formatTime('dd', params.value[0]);
+									},
+									offset: [-cellSize[0] / 2 + 10, -cellSize[1] / 2 + 10],
+									textStyle: {
+										
+										color: "white",
+										fontSize: 7
+									}
+								}
+							},
+							data: scatterData
+						}]
+					};
 				scatterData = getVirtulData2();
 				myChart.setOption({
 					series: getPieSeries2(scatterData, myChart)
 				});
 				return;
 			}
-			console.log("query people "+people[dataind]);
+			//console.log("query people "+people[dataind]);
 			$.ajax({
 				type: "POST",
 				url: "http://127.0.0.1:9494/get_record_by_personid",
@@ -302,7 +417,7 @@
 				contentType: "application/json;charset=utf-8",
 				data: JSON.stringify({personid:people[dataind]}),
 				success: function(data) {
-					console.log(data.res);
+					//console.log(data.res);
 					if(data.status==0){
 						console.log("empty");
 						return;
@@ -335,10 +450,94 @@
 					getdataajaxbyidarr();
 					console.log("Got");
 					console.log(people);	
-
+					monL = data.monthL;
+					console.log(monL);
 					getdataajaxbyidarr();
 
+					 datarange=[['2016-09'],['2016-10'],['2016-11']];
+					 finnalrange = [];
+					if(monL == 0 || monL == 10)
+					{
+						finnalrange = datarange[1];
+					}
+					else if(monL == 9)
+					{
+						finnalrange = datarange[0];
+					}
+					else if(monL == 11)
+					{
+						finnalrange = datarange[2];
+					}
+					
+
+					console.log(finnalrange);
+					option = {
+						backgroundColor: '#404a59',
+						tooltip : {},
+						calendar: {
+							top: 'middle',
+							left: 'left',
+							orient: 'vertical',
+							cellSize: cellSize,
+							splitLine:{
+								lineStyle:{
+									color:"white"
+								}
+							},
+							itemStyle:{
+								normal:{
+									color:"#5c6573"
+								} 
+							},
+							yearLabel: {
+								show: true,
+								textStyle: {
+									fontSize: 15
+								}
+							},
+							dayLabel: {
+								margin: 10,
+								firstDay: 1,
+								nameMap: ['日', '一', '二', '三', '四', '五', '六'],
+								textStyle: {
+									color: "white"
+								},
+								borderColor:"white"
+							},
+							monthLabel: {
+								show: false
+							},
+							range: finnalrange
+						},
+						series: [{
+							id: 'label',
+							type: 'scatter',
+							coordinateSystem: 'calendar',
+							symbolSize: 1,
+							label: {
+								normal: {
+									show: true,
+									formatter: function (params) {
+										return echarts.format.formatTime('dd', params.value[0]);
+									},
+									offset: [-cellSize[0] / 2 + 10, -cellSize[1] / 2 + 10],
+									textStyle: {
+										
+										color: "white",
+										fontSize: 7
+									}
+								}
+							},
+							data: scatterData
+						}]
+					};
+
+
+
+
+
 					catterData = getVirtulData2();
+					console.log(option);
 					myChart.setOption({
 					series: getPieSeries2(scatterData, myChart)
 					});

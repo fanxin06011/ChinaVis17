@@ -5,7 +5,7 @@
     var sentData;
     var selected_time_min;
     var selected_time_max;
-    var strt = "2016-10";
+    var strt = 0;
 	function Crime(Observer){
 		var crime={};
         var first_flag=0;
@@ -42,6 +42,24 @@
 			var parseTime = d3.time.format("%Y-%m-%d %H:%M:%S");
             selected_time_min = parseTime(data.values.min);
             selected_time_max = parseTime(data.values.max);
+            console.log(selected_time_min.split("-")[1]);
+            if(selected_time_min.split("-")[1] == "09")
+            {
+                strt = 9;
+            }
+            else if(selected_time_min.split("-")[1] == "10")
+            {
+                strt = 10;
+            }
+            else if(selected_time_min.split("-")[1] == "11")
+            {
+                strt = 11;
+            }
+            else
+            {
+                console.log("Invalid Strt");
+            }
+
 			console.log({beginTime:parseTime(data.values.min), endTime:parseTime(data.values.max)});
 			$.ajax({
 				type: "POST",
@@ -247,13 +265,22 @@
             {
                 sentPerson.push(categories[m]);
             }
-            strt = (selected_time_min);
+            if(typeof(strt) == "number")
+            {
             console.log(strt);
+            }
+            else
+            {
+            console.log("Not number");
+            console.log(typeof(strt));
+
+            }   
             sentData = {
                 Status : first_flag,
                 index  : temp_min,
                 personid : sentPerson,
-                data: gantt_data
+                data: gantt_data,
+                monthL: strt
             }
             /*
 
@@ -443,8 +470,8 @@
                         var tmp_begin_date = new Date(str1);
                         var tmp_end_date   = new Date(str2);
                         var tmp_base_time  = new Date(str3);
-                        console.log(tmp_begin_date);
-                        console.log(tmp_end_date);
+                        //console.log(tmp_begin_date);
+                        //console.log(tmp_end_date);
                         categories.push(tmp["PERSONID"]);
                         gantt_data.push({
                                 name: types[0].name,
