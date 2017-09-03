@@ -403,7 +403,13 @@
 							data: scatterData
 						}]
 					};
+				
+					myChart.setOption({
+					calendar: {range : finnalrange}
+					});
+				console.log(finnalrange);
 				scatterData = getVirtulData2();
+
 				myChart.setOption({
 					series: getPieSeries2(scatterData, myChart)
 				});
@@ -532,8 +538,12 @@
 						}]
 					};
 
+					myChart.setOption({
+					calendar: {range : finnalrange}
+					});
 
 
+					console.log(finnalrange);
 
 
 					catterData = getVirtulData2();
