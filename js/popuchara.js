@@ -275,7 +275,7 @@
                             }
                         }
                         DrawProvinceLine();
-                        SendMessage(selectname);
+                        SendMessage();
                     })
             });
     
@@ -410,10 +410,16 @@
                     });
         }
 
-        function SendMessage(name) {
-            var Senddata = [];
-            var index = checkhasdata(name);
-            if(index != -1) {
+        function SendMessage() {
+            var selected_provinces = [];
+            for (var i=0; i<selectData.length; i++) {
+                if(selectData[i] != -1) {
+                    selected_provinces.push(selectData[i]);
+                }
+            }
+            var num = selected_provinces.length;
+            for(var i=0; i<num; i++) {
+                var index = selected_provinces[i];
                 var id = provinces[index].code;
                 $.ajax({
                     type: "POST",
@@ -422,7 +428,10 @@
                     contentType: "application/json;charset=utf-8",
                     data:JSON.stringify({provinceID:id}),
                     success: function(data) {
-                        Senddata = data.res;
+                        var Senddata = {};
+                        Senddata.res = [];
+                        Senddata.flag = num;
+                        Senddata.res = data.res;
                         console.log(Senddata);
                         Observer.fireEvent("problem2",Senddata,Popuchara);
                     },
@@ -430,10 +439,15 @@
                         alert("查询失败");
                     }
                 });
-            } else {
-                //console.log(Senddata);
-                Observer.fireEvent("problem2",Senddata,Popuchara);
             }
+            if (num == 0){
+                //console.log(Senddata);
+                var Senddata = {};
+                Senddata.flag = 0;
+                Senddata.res = [];
+                console.log(Senddata);
+                Observer.fireEvent("problem2",Senddata,Popuchara);
+            }    
         }
         
         
