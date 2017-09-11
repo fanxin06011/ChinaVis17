@@ -878,7 +878,7 @@
 				if(from == Popuchara ){
 					
 					//console.log(data[0]);
-					if(flag_for_prob_2 < data.flag)
+					if(flag_for_prob_2 < data.flag - 1)
 					{
 						var tmpp = data.res;
 						for (var i=0;i<tmpp.length;i++)
@@ -889,6 +889,12 @@
 					}
 					else
 					{
+						//var tmpp = data.res;
+						for (var i=0;i<data.res.length;i++)
+						{
+							data_for_prob_2[data.res[i].id]+=data.res[i].nums;
+						}
+
 						var tt = [];
 						for(var i=0;i<data_for_prob_2.length;i++)
 						{
@@ -896,17 +902,19 @@
 							{
 								tt.push({
 										id: i,
-										nums: data_for_prob_2
+										nums: data_for_prob_2[i]
 										})
 							}
 						}
 						flag_for_prob_2 = 0;
 						console.log(tt);
 					if(barmap.mode==2){
+						console.log("11111111");
 						problem2barobj = tt;
+						console.log(problem2barobj);
 						//$("#problem_1").hide();
 						re0();
-						let tmp=_.pluck(data,"nums");
+						let tmp=_.pluck(tt,"nums");
 						//console.log(tmp);
 						mapoption2.visualMap.min=_.min(tmp);
 						mapoption2.visualMap.max=_.max(tmp);
@@ -914,6 +922,9 @@
 						//mapoption2.series[1].data=convertData2(problem2barobj);
 						mapoption2.series[0].data=convertData2(problem2barobj);
 						mapChart.setOption(mapoption2, true);
+						data_for_prob_2 = Array.apply(null, Array(3000)).map(function(item, i) {
+    return 0;
+});
 						}
 					}
 				}
