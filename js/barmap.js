@@ -876,7 +876,7 @@
 			
 			if(message == "problem2"){
 				if(from == Popuchara ){
-					console.log(data);
+					
 					//console.log(data[0]);
 					if(flag_for_prob_2 < data.flag)
 					{
@@ -901,7 +901,7 @@
 							}
 						}
 						flag_for_prob_2 = 0;
-
+						console.log(tt);
 					if(barmap.mode==2){
 						problem2barobj = tt;
 						//$("#problem_1").hide();
