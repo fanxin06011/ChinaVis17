@@ -534,6 +534,7 @@
 			if(message == "bar_dblclicked"){
 				if(from == Barmap ){
                     $("#p4_pop").show();
+                    console.log(data);
 					update(data);
 				}
 			}

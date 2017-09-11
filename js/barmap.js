@@ -449,7 +449,16 @@
 						dataIndex: params.dataIndex
 					})
 					$("#p4_pop").css("left",event.clientX+10).css("top",event.clientY+10);
-					Observer.fireEvent("bar_dblclicked",params.data.ind,Barmap);
+					if (!params.data.ind)
+					{
+						Observer.fireEvent("bar_dblclicked",params.data.barID,Barmap);
+						console.log(params);
+						console.log("1111111111111111")
+					}
+					else
+					{
+						Observer.fireEvent("bar_dblclicked",params.data.ind,Barmap);
+					}
 					$("#p4_pop").show();
 				}
 			}
