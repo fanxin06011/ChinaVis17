@@ -26,7 +26,12 @@
 		//mode-2 问题二 流动人口（籍贯） 热力图
 		//mode-3 问题三 青年犯罪团伙 高亮
 		barmap.mode=1;
-		
+
+		var flag_for_prob_2 = 0;
+		var data_for_prob_2 = Array.apply(null, Array(3000)).map(function(item, i) {
+    return 0;
+});
+
 		//map data
 		var geoCoordMap = {};
 		var bardata=[];
@@ -872,9 +877,33 @@
 			if(message == "problem2"){
 				if(from == Popuchara ){
 					console.log(data);
-					console.log(data[0]);
-					problem2barobj=data;
+					//console.log(data[0]);
+					if(flag_for_prob_2 < data.flag)
+					{
+						var tmpp = data.res;
+						for (var i=0;i<tmpp.length;i++)
+						{
+							data_for_prob_2[tmpp[i].id]+=tmpp[i].nums;
+						}
+						flag_for_prob_2 ++;
+					}
+					else
+					{
+						var tt = [];
+						for(var i=0;i<data_for_prob_2.length;i++)
+						{
+							if(data_for_prob_2[i] != 0)
+							{
+								tt.push({
+										id: i,
+										nums: data_for_prob_2
+										})
+							}
+						}
+						flag_for_prob_2 = 0;
+
 					if(barmap.mode==2){
+						problem2barobj = tt;
 						//$("#problem_1").hide();
 						re0();
 						let tmp=_.pluck(data,"nums");
@@ -885,6 +914,7 @@
 						//mapoption2.series[1].data=convertData2(problem2barobj);
 						mapoption2.series[0].data=convertData2(problem2barobj);
 						mapChart.setOption(mapoption2, true);
+						}
 					}
 				}
 			}
