@@ -275,7 +275,7 @@
                             }
                         }
                         DrawProvinceLine();
-                        //SendMessage(selectname);
+                        SendMessage(selectname);
                     })
             });
     
