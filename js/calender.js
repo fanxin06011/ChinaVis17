@@ -2,7 +2,7 @@
 
 
 (function(){
-
+	var ttt=[];
 	var monL = 0;
 	var datarange;
 	var finnalrange;
@@ -142,7 +142,8 @@
 
 				fff=_.pluck(calenderdatareturn2,"ID");
 				fff=_.uniq(fff);
-
+				all = fff;
+				console.log(all);
 				var Ddata = [];
 				for(var a =0 ; a<fff.length;a++)
 				{
@@ -313,9 +314,11 @@
 			myChart.setOption({
 					series: getPieSeries(scatterData, myChart)
 				});
+
 		}
 		
 		function getdataajaxbyidarr(){
+			all = [];
 			calenderdatareturn=[];
 			calenderdatareturn2=[];
 			getdataajax(0);
@@ -459,7 +462,6 @@
 					monL = data.monthL;
 					console.log(monL);
 					getdataajaxbyidarr();
-
 					 datarange=[['2016-09'],['2016-10'],['2016-11']];
 					 finnalrange = [];
 					if(monL == 0 || monL == 10)
@@ -541,7 +543,26 @@
 					myChart.setOption({
 					calendar: {range : finnalrange}
 					});
-
+					console.log(people);
+					if(people.length <= 5 && people.length != 0)
+					{
+						myChart.setOption({
+							legend: {
+								data : people,
+								top: 200,
+								left: 0
+									}
+							});
+					}
+					else
+					{
+						myChart.setOption({
+							legend: {
+								data: []
+							}
+							});
+					
+					}
 
 					console.log(finnalrange);
 

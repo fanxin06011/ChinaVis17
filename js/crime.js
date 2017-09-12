@@ -472,11 +472,14 @@
                         var tmp_base_time  = new Date(str3);
                         //console.log(tmp_begin_date);
                         //console.log(tmp_end_date);
-                        categories.push(tmp["PERSONID"]);
+                        if($.inArray(tmp["PERSONID"],categories) == -1)
+                        {
+                            categories.push(tmp["PERSONID"]);
+                        }  
                         gantt_data.push({
                                 name: types[0].name,
                                 value: [
-                                    k,
+                                    categories.indexOf(tmp["PERSONID"]),
                                     (tmp_begin_date.getTime()),
                                     (tmp_end_date.getTime()),
                                     (tmp_end_date.getTime()-tmp_begin_date.getTime())                        
@@ -496,7 +499,7 @@
             tooltip: {
                 formatter: function (params) {
                     console.log(params);
-                    return categories[params.dataIndex] + params.name + ': ' + params.value[3] + ' ms';
+                    return categories[params.data.value[0]] + ': ' + params.value[3] + ' ms';
                 }
             },  
             legend: {
@@ -532,7 +535,7 @@
                 scale: true,
                 axisLabel: {
                     formatter: function (val) {
-                        return Math.max(0, val - startTime) + ' ms';
+                        return Math.max(0, val - tmp_base_time.getTime()) + ' ms';
                     },
                 textStyle: {
                                 color: 'white'
