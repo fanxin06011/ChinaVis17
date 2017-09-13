@@ -453,6 +453,10 @@
                 success: function(data) {
                     console.log(data.res);
                     console.log(data.res.length);
+                    if(data.res.length == 0)
+                    {
+                        alert("No Required Data.");
+                    }
                     var people=data.res;
                     for(var k = 0; k < people.length;k++)
                     {
