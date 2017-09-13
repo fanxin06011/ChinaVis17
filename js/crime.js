@@ -321,7 +321,7 @@
                 //console.log(gantt_data[i]);
                 if(gantt_data[i].value[0] >= sentData.index[0] && gantt_data[i].value[0] <= sentData.index[1])
                 {
-                    if($.inArray(gcate,categories[gantt_data[i].value[0]]) == -1)
+                    if($.inArray(categories[gantt_data[i].value[0]],gcate) == -1)
                     {
                         console.log(categories[gantt_data[i].value[0]]);
                         gcate.push(categories[gantt_data[i].value[0]]);
