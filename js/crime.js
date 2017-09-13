@@ -88,6 +88,7 @@
         var dataCount = 10;
         var startTime = +new Date();
         console.log(typeof(startTime));
+        var seridata = [];
         var categories = ['cc03a93e2decc4cc1c', 'ea723a6e98e5749bb0', '003f97c9f42edf51b6','4aa5e9d88ccb6c670f'];
         var types = [
             {name: 'Online Time', color: '#7b9ce1'}
@@ -145,7 +146,8 @@
         option = {
             tooltip: {
                 formatter: function (params) {
-                    return params.marker + params.name + ': ' + params.value[3] + ' ms';
+                    console.log(params);
+                    return params.marker + ': ' + params.value[3] + ' ms';
                 }
             },  
             legend: {
@@ -201,7 +203,7 @@
                 },
                 throttleType: 'debounce',
                 throttleDelay: 300,
-        },
+             },
 
             xAxis: {
                 min: startTime,
@@ -313,10 +315,31 @@
             
             var gcate = [];
             var gdata = [];
-            for(var i=0;i<=sentData.index[1];i++)
+            //console.log(gantt_data);
+            for(var i=0;i<gantt_data.length;i++)
             {
-                if(i >= sentData.index[0] && i <= sentData.index[1])
+                //console.log(gantt_data[i]);
+                if(gantt_data[i].value[0] >= sentData.index[0] && gantt_data[i].value[0] <= sentData.index[1])
                 {
+                    if($.inArray(gcate,categories[gantt_data[i].value[0]]) == -1)
+                    {
+                        console.log(categories[gantt_data[i].value[0]]);
+                        gcate.push(categories[gantt_data[i].value[0]]);
+                        console.log(gcate);
+                    }
+                    gantt_data[i].value[0] = gcate.indexOf(categories[gantt_data[i].value[0]]);
+                    gdata.push(gantt_data[i]);
+
+                    if(tmin == -1 || tmin > gantt_data[i].value[1])
+                    {
+                        tmin = gantt_data[i].value[1];
+                    }
+                    if(tmax == -1 || tmax < gantt_data[i].value[2])
+                    {
+                        tmax = gantt_data[i].value[2]
+                    }
+
+                    /*
                     gantt_data[i].value[0] = gcate.length;
                     gcate.push(categories[i]);
                     gdata.push(gantt_data[i]);
@@ -328,12 +351,13 @@
                     {
                         tmax = gantt_data[i].value[2]
                     }
-
+                    */
                 }
             }
             
               
             gantt_data = [];
+            //seridata   = [];
             categories = [];
             gantt_data = gdata;
             categories = gcate;
@@ -380,7 +404,7 @@
                 scale: true,
                 axisLabel: {
                     formatter: function (val) {
-                        return Math.max(0, val - startTime) + ' ms';
+                        return Math.max(0, val - tmin) + ' ms';
                     },
                 textStyle: {
                                 color: 'white'
@@ -479,7 +503,24 @@
                         if($.inArray(tmp["PERSONID"],categories) == -1)
                         {
                             categories.push(tmp["PERSONID"]);
+                            seridata.push([]);
                         }  
+
+                        seridata[categories.indexOf(tmp["PERSONID"])].push({
+                                name: types[0].name,
+                                value: [
+                                    categories.indexOf(tmp["PERSONID"]),
+                                    (tmp_begin_date.getTime()),
+                                    (tmp_end_date.getTime()),
+                                    (tmp_end_date.getTime()-tmp_begin_date.getTime())                        
+                                    ],
+                                itemStyle: {
+                                    normal: {
+                                        color: types[0].color
+                                    }
+                                }
+                            });
+
                         gantt_data.push({
                                 name: types[0].name,
                                 value: [
@@ -498,11 +539,11 @@
                     }
                     console.log(gantt_data);
                     console.log(categories);
-            
+                    console.log(seridata);
             option = {
             tooltip: {
                 formatter: function (params) {
-                    console.log(params);
+                    //console.log(params);
                     return categories[params.data.value[0]] + ': ' + params.value[3] + ' ms';
                 }
             },  
@@ -611,6 +652,7 @@
 					console.log(data);
                     categories = [];
                     gantt_data = [];
+                    seridata   = [];
                     console.log("aa");
                     getnewdataid(data);
 				}
