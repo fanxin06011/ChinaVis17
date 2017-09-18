@@ -323,9 +323,9 @@
                 {
                     if($.inArray(categories[gantt_data[i].value[0]],gcate) == -1)
                     {
-                        console.log(categories[gantt_data[i].value[0]]);
+                        //console.log(categories[gantt_data[i].value[0]]);
                         gcate.push(categories[gantt_data[i].value[0]]);
-                        console.log(gcate);
+                        //console.log(gcate);
                     }
                     gantt_data[i].value[0] = gcate.indexOf(categories[gantt_data[i].value[0]]);
                     gdata.push(gantt_data[i]);
@@ -367,8 +367,8 @@
             option = {
             tooltip: {
                 formatter: function (params) {
-                    //console.log(params);
-                    return categories[params.dataIndex] + params.name + ': ' + params.value[3] + ' ms';
+                    console.log(params);
+                    return categories[params.value[0]] + ': ' + params.value[3] + ' ms';
                 }
             },  
             legend: {
@@ -540,11 +540,12 @@
                     console.log(gantt_data);
                     console.log(categories);
                     console.log(seridata);
+
             option = {
             tooltip: {
                 formatter: function (params) {
                     //console.log(params);
-                    return categories[params.data.value[0]] + ': ' + params.value[3] + ' ms';
+                    return categories[params.value[0]] + ': ' + params.value[3] + ' ms';
                 }
             },  
             legend: {
