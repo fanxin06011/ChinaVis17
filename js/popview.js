@@ -98,7 +98,7 @@
             })
             .attr("class","p4_1t");
             
-        var p4_0 = svg1.append('g').attr('transform', "translate(" + width_svg*3/4 + ',' + height_svg/2 + ')');
+        var p4_0 = svg1.append('g').attr('transform', "translate(" + (width_svg*3/4-50) + ',' + height_svg/2 + ')');
         var dataset = [1,2,3];
         var pie = d3.layout.pie().sort(null).value(function(d){return d;})(dataset);
         var radius = (d3.min([width_svg,height_svg])-padding1)/2;
@@ -116,7 +116,39 @@
                 return arc(d);
             })
             .attr('class', "p4_0");
-        arcs.append("text")
+
+        var p4_0_1 = svg1.append('g').attr('transform', "translate(" + (width_svg*3/4+30) + ',' + 10 + ')');
+        var textdata = ["1","2","3"];
+        p4_0_1.append('circle')
+            .attr('cx',30)
+            .attr('cy',20)
+            .attr('r',10)
+            .attr('fill',color2[0]);
+        p4_0_1.append('circle')
+            .attr('cx',30)
+            .attr('cy',45)
+            .attr('r',10)
+            .attr('fill',color2[1]);
+        p4_0_1.append('circle')
+            .attr('cx',30)
+            .attr('cy',70)
+            .attr('r',10)
+            .attr('fill',color2[2]);
+        p4_0_1.selectAll('text')
+            .data(textdata)
+            .enter()
+            .append('text')
+            .attr('class', "p4_0t")
+            .attr('x',45)
+            .attr('y',function(d,i) {
+                return 25+25*i;
+            })
+            .text(function(d,i) {
+                return d;
+            })
+            .attr("fill", "white");
+
+        /*arcs.append("text")
             .attr("transform",function(d){
                 return "translate(" + arc.centroid(d) + ")";
             })
@@ -125,7 +157,7 @@
             .text(function(d){
                 return d.data;
             })
-            .attr("class","p4_0t");
+            .attr("class","p4_0t");*/
             
         
 
@@ -306,9 +338,6 @@
                         });
                     d3.selectAll(".p4_0t")
                         .data(pie)
-                        .attr("transform",function(d){
-                            return "translate(" + arc.centroid(d) + ")";
-                        })
                         .text(function(d,i){
                             return provinceID[d.data["provinceID"]]+": "+d.data["nums"];
                         });
