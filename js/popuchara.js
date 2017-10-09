@@ -10,7 +10,7 @@
         var width1 = 500;
         var width2 = 500;
         var height1 = 330;
-        var height2 = 130;
+        var height2 = 230;
         var padding2 = {top:10,right:10,bottom:30,left:50};
 
         var svg1 = d3.select("#china_map").append("svg")

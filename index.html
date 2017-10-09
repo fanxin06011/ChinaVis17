@@ -53,7 +53,8 @@
 			Problem2</button>
 		<button id="button3" class="btn3">
 			Problem3</button>
-
+		<button id="button4" class="btn4">
+			Reload</button>
 		<script>
 		var oBtn1 = document.getElementById('button1');
     	oBtn1.onclick = function(){
@@ -79,6 +80,13 @@
     	oBtn3.onclick = function(){
     					barmap.mode=3;
         alert("Btn3 Clicked");
+    	};
+
+
+    	var oBtn4 = document.getElementById('button4');
+    	oBtn4.onclick = function(){
+    		window.location.reload();
+    		alert("Reload");
     	};
 
 		</script>
